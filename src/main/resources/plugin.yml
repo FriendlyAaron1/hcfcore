@@ -1,0 +1,20 @@
+name: hcfcore
+version: '${project.version}'
+main: org.ayple.hcfcore.Hcfcore
+api-version: '1.20'
+authors: [Adam]
+commands:
+  corehelp:
+    description: Gives the commands and help for the core hcf plugin
+    usage: /<command>
+  admin:
+    description: Admin mode
+    usage: /<command>
+    aliases: -mod -v
+  tpa:
+    description: Teleport to a player
+    usage: /<command> [player name]
+  tp:
+    description: Teleport to a player [admin]
+    usage: /<command> [player name]
+
