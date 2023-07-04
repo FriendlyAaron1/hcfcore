@@ -23,10 +23,11 @@ public class ConfigHelper {
         }
 
         reload();
+
     }
 
     public static FileConfiguration getConfig() {
-        return configFile;
+        return YamlConfiguration.loadConfiguration(file);
     }
 
     public static void reload() {
@@ -40,4 +41,5 @@ public class ConfigHelper {
             System.out.println("Failed to save file!");
         }
     }
+
 }
