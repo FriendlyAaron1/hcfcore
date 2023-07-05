@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.SelectionsManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,5 +13,6 @@ public class PlayerLeaveServerEvent implements Listener {
     {
         Player p = event.getPlayer();
         SelectionsManager.clearAnySelectionPlayerHas(p);
+
     }
 }

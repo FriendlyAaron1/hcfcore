@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `factions` (
     `faction_name` VARCHAR(20) NOT NULL UNIQUE,
     `dtr` FLOAT NOT NULL,
     `ally_faction_id` VARCHAR(100),
+    `faction_bal` INT NOT NULL,
     `faction_hq_x` INT NOT NULL,
     `faction_hq_y` INT NOT NULL,
     `faction_hq_z` INT NOT NULL,
@@ -15,4 +16,6 @@ CREATE TABLE IF NOT EXISTS `factions` (
 --
 
     `datetime_created` TIMESTAMP DEFAULT NOW() NOT NULL
+
+
 );

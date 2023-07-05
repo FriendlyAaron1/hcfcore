@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.core.faction;
 
 import org.ayple.hcfcore.core.claims.Claim;
+import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,22 +13,16 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class FactionManager {
-    private static FactionManager INSTANCE;
-
-    public static FactionManager getInstance() {
-        return INSTANCE;
-    }
-
-    public ArrayList<Faction> getFactions() {
+    public static ArrayList<Faction> getFactions() {
         return null;
     }
 
-    public Faction getFaction(UUID id) {
+    public static Faction getFaction(UUID id) {
         return null;
     }
 
 
-    public boolean playerInFaction(UUID player_id) throws SQLException {
+    public static boolean playerInFaction(UUID player_id) throws SQLException {
         String sql = "SELECT * FROM members WHERE player_uuid=?";
         HcfSqlConnection conn = new HcfSqlConnection();
 
@@ -45,7 +40,7 @@ public class FactionManager {
     }
 
     // TODO
-    public Faction getFactionByPlayerID(UUID player_id) throws SQLException {
+    public static Faction getFactionFromPlayerID(UUID player_id) throws SQLException {
         String sql = "SELECT * FROM members WHERE player_uuid=?";
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -62,7 +57,7 @@ public class FactionManager {
 
     }
 
-    public Faction getFaction(String faction_name) throws SQLException {
+    public static Faction getFaction(String faction_name) throws SQLException {
         String sql = "SELECT * FROM factions WHERE faction_name=?";
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -85,14 +80,15 @@ public class FactionManager {
         int corner_1_z = result.getInt("corner_1_z");
         int corner_2_x = result.getInt("corner_2_x");
         int corner_2_z = result.getInt("corner_z_z");
+        int bal = result.getInt("faction_bal");
 
         Location hq = new Location(Bukkit.getWorld("world"), faction_hq_x, faction_hq_y, faction_hq_z);
         Claim claim = new Claim(corner_1_x, corner_1_z, corner_2_x, corner_2_z);
 
-        return new Faction(id, faction_name, dtr, hq, claim);
+        return new Faction(id, faction_name, dtr, bal, hq, claim);
     }
 
-    public UUID getFactionIDFromName(String faction_name) throws SQLException {
+    public static UUID getFactionIDFromName(String faction_name) throws SQLException {
         String sql = "SELECT id FROM factions WHERE faction_name=?";
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -110,9 +106,9 @@ public class FactionManager {
     }
 
 
-    public void newFaction(String faction_name, Player leader) throws SQLException {
+    public static boolean newFaction(String faction_name, Player leader) throws SQLException {
         if (getFaction(faction_name) != null) {
-            return;
+            return false;
         }
 
         String sql = "INSERT INTO factions (faction_name) VALUES (?)";
@@ -131,5 +127,30 @@ public class FactionManager {
         statement.executeUpdate();
         conn.closeConnection();
 
+        return true;
+    }
+
+    public static boolean isPlayerLeader(UUID player_id) throws SQLException {
+        Faction faction = getFactionFromPlayerID(player_id);
+        if (faction == null) {
+            return false;
+        }
+
+        if (faction.getFactionMembers().get(player_id).equals(FactionMemberRank.LEADER)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void disbandFaction(UUID faction_id) throws SQLException {
+        String sql = "DROP FROM factions WHERE id=?";
+        HcfSqlConnection conn = new HcfSqlConnection();
+        PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+        statement.setString(1, faction_id.toString());
+        statement.executeUpdate();
+        conn.closeConnection();
+
+        ClaimsManager.loadClaims(); // reloads the claims
     }
 }

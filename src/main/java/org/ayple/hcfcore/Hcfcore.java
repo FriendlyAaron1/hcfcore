@@ -1,10 +1,13 @@
 package org.ayple.hcfcore;
 
+import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.events.PlayerJoinedServerEvent;
 import org.ayple.hcfcore.helpers.ConfigHelper;
 import org.ayple.hcfcore.events.PlayerEnchantedItemEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 public final class Hcfcore extends JavaPlugin {
     private static Hcfcore INSTANCE;
@@ -22,6 +25,11 @@ public final class Hcfcore extends JavaPlugin {
         ConfigHelper.getConfig().options().copyDefaults(true);
         ConfigHelper.save();
 
+        try {
+            ClaimsManager.loadClaims();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         registerCommands();
         registerEvents();

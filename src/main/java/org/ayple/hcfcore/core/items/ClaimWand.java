@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ClaimWand {
     Player owner;
@@ -34,6 +35,15 @@ public class ClaimWand {
 
     public ItemStack getClaimWand() {
         return this.claim_wand;
+    }
+
+    public static boolean isItemClaimWand(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            return (meta.isUnbreakable() && item.containsEnchantment(Enchantment.MENDING) && meta.getDisplayName().equals("CLAIM WAND"));
+        }
+
+        return false;
     }
 
 }
