@@ -26,28 +26,30 @@ public class CommandFactionJoin extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try{
-            if (args.length <= 2) return;
-            if (FactionManager.getFactionFromPlayerID(player.getUniqueId()).equals(null)) return; // player not in faction
+            if (args.length < 2) return false;
+            if (FactionManager.getFactionFromPlayerID(player.getUniqueId()) != null) {
+                player.sendMessage("You are already in a faction! do /f leave first");
+                return true;
+            }
 
-            Faction target_faction = FactionManager.getFaction(args[2]);
+            Faction target_faction = FactionManager.getFaction(args[1]);
             if (target_faction == null) {
                 player.sendMessage("That faction doesnt exist");
-                return;
+                return true;
             }
 
             FactionInvite invite = new FactionInvite(target_faction.getFactionID(), player.getUniqueId());
-            if (FactionInviteManager.lookForInvite(invite)) {
-                FactionInviteManager.onPlayerJoinFaction(invite);
-                player.sendMessage("Joined " + target_faction.getFactionName());
-                return;
-            }
+            FactionInviteManager.onPlayerJoinFaction(invite);
+            player.sendMessage("Joined " + target_faction.getFactionName());
+            return true;
 
-            player.sendMessage("There is no faction invite");
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR");
         }
+
+        return true;
     }
 }

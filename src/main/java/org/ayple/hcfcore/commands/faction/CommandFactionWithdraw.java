@@ -26,30 +26,37 @@ public class CommandFactionWithdraw extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
-            if (args.length > 2) {
+            if (args.length >= 2) {
                 Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
                 if (player_faction == null) {
-                    return;
+                    player.sendMessage("You are not in a faction!");
+                    return true;
                 }
 
                 int faction_bal = player_faction.getFactionBal();
-                int amount = Integer.parseInt(args[2]);
+                int amount = Integer.parseInt(args[1]);
                 //int player_bal = BalanceHandler.getPlayerBalance(player);
 
                 if (faction_bal >= amount) {
                     BalanceHandler.giveMoneyToPlayer(player, amount);
                     BalanceHandler.takeMoneyFromFaction(player_faction.getFactionID(), amount);
+                    return true;
                 }
 
             }
+
+            return false;
+
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR");
+            return false;
         } catch (NumberFormatException e) {
             e.printStackTrace();
             player.sendMessage("Invaild number");
+            return false;
         }
 
     }

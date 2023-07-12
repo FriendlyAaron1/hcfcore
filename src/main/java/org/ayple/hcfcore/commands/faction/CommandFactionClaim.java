@@ -26,29 +26,31 @@ public class CommandFactionClaim extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
             if (FactionManager.playerInFaction(player.getUniqueId())) {
                 if (FactionManager.isPlayerLeader(player.getUniqueId())) {
                     player.getInventory().addItem(ClaimWand.makeNewWand());
-                    return;
+                    player.sendMessage("You have recieved a claim wand!");
+                    return true;
                 }
 
                 player.sendMessage("You must be leader to be able to claim!");
-                return;
+                return false;
             }
 
             player.sendMessage("You are not in a faction. Create one with /f create [name]");
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR! CONTACT DEVELOPER ASAP.");
-            return;
         }
 
 //        if (player.getInventory().getItemInMainHand() == null) {
 //            player.getInventory().addItem(ClaimWand.makeNewWand());
 //            return;
 //        }
+
+        return true;
 
     }
 }

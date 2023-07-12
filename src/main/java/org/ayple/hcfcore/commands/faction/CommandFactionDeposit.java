@@ -25,29 +25,40 @@ public class CommandFactionDeposit extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
-            if (args.length > 2) {
-                int amount = Integer.parseInt(args[2]);
+            if (args.length >= 2) {
+                int amount;
+
+                if (args[1].equalsIgnoreCase("all")) {
+                    amount = BalanceHandler.getPlayerBalance(player);
+                } else {
+                    amount = Integer.parseInt(args[1]);
+                }
+
+
+
                 Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
                 if (player_faction == null) {
                     player.sendMessage("You are not in a faction!");
-                    return;
+                    return false;
                 }
 
                 if (BalanceHandler.getPlayerBalance(player) >= amount) {
                     BalanceHandler.takeMoneyFromPlayer(player, amount);
                     BalanceHandler.giveMoneyToFaction(player_faction.getFactionID(), amount);
                     player.sendMessage("Deposited " + Integer.toString(amount) + " into the faction balance!");
-                    return;
+                    return true;
                 }
 
                 player.sendMessage("Insufficient funds");
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR");
         }
 
+        return true;
     }
 }

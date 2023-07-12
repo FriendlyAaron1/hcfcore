@@ -23,19 +23,30 @@ public class CommandFactionDisband extends SubCommand {
         return "/f disband";
     }
 
+    // TODO: test this
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
             Faction faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
-            if (faction.equals(null)) {
-                player.sendMessage("Failed to disband faction!");
-                return;
+            if (faction == null) {
+                player.sendMessage("You are not in a faction!");
+                return true;
             }
 
 
+            if (!FactionManager.isPlayerLeader(player.getUniqueId())) {
+                player.sendMessage("You need to be leader!");
+                return true;
+            }
+
+            FactionManager.disbandFaction(faction.getFactionID());
+
 
         } catch (SQLException e) {
-
+            e.printStackTrace();
+            player.sendMessage("SQL ERROR! CONSULT DEVELOPER ASAP.");
         }
+
+        return false;
     }
 }

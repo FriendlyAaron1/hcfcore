@@ -1,9 +1,11 @@
 package org.ayple.hcfcore;
 
+import org.ayple.hcfcore.commands.CommandBalance;
+import org.ayple.hcfcore.commands.CommandFaction;
+import org.ayple.hcfcore.commands.CommandLogout;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.events.PlayerJoinedServerEvent;
+import org.ayple.hcfcore.events.*;
 import org.ayple.hcfcore.helpers.ConfigHelper;
-import org.ayple.hcfcore.events.PlayerEnchantedItemEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +24,14 @@ public final class Hcfcore extends JavaPlugin {
         INSTANCE = this;
         System.out.println("Starting up HCF core!");
         ConfigHelper.setup();
+
+        ConfigHelper.getConfig().addDefault("DB_HOST", "127.0.0.1");
+        ConfigHelper.getConfig().addDefault("DB_PORT", "3006");
+        ConfigHelper.getConfig().addDefault("DB_USER", "root");
+        ConfigHelper.getConfig().addDefault("DB_PASS", "password");
+        ConfigHelper.getConfig().addDefault("DB_NAME", "hcf");
+
+
         ConfigHelper.getConfig().options().copyDefaults(true);
         ConfigHelper.save();
 
@@ -39,12 +49,23 @@ public final class Hcfcore extends JavaPlugin {
     }
 
     private void registerCommands() {
+        getCommand("faction").setExecutor(new CommandFaction());
+        getCommand("logout").setExecutor(new CommandLogout());
+        getCommand("balance").setExecutor(new CommandBalance());
     }
 
     public void registerEvents() {
         PluginManager manager =  getServer().getPluginManager();
+        manager.registerEvents(new BardEffectsEvent(), this);
+        manager.registerEvents(new ClaimWandEvent(), this);
+        manager.registerEvents(new PlayerArmorChangeEvent(), this);
+        manager.registerEvents(new PlayerDeathBanEvent(), this);
+        manager.registerEvents(new PlayerHitEvent(), this);
+        manager.registerEvents(new PlayerInteractedClaimEvent(), this);
+        manager.registerEvents(new PlayerInteractEntity(), this);
         manager.registerEvents(new PlayerJoinedServerEvent(), this);
-        manager.registerEvents(new PlayerEnchantedItemEvent(), this);
+        manager.registerEvents(new PlayerLeaveServerEvent(), this);
+        manager.registerEvents(new PlayerMoveEvent(), this);
     }
 
     @Override

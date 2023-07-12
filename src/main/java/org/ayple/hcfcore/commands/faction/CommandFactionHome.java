@@ -2,6 +2,7 @@ package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.FactionManager;
 import org.bukkit.Location;
@@ -27,39 +28,32 @@ public class CommandFactionHome extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
             Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
             if (player_faction == null) {
                 player.sendMessage("You are not in a faction.");
-                return;
+                return false;
             }
 
             Location hq = player_faction.getFactionHQ();
             if (hq == null) {
                 player.sendMessage("Faction does not have a home set");
-                return;
+                return true;
             }
 
 
-            new BukkitRunnable() {
-                int seconds_left = 10;
+            if (!CooldownManager.hasHomeTimer(player.getUniqueId())) {
+                CooldownManager.registerHomeTimer(player, hq);
+            }
 
-                @Override
-                public void run() {
-                    if (seconds_left == 0) {
-                        player.teleport(hq);
-                        cancel();
-                    } else {
-                        seconds_left--;
-                    }
-                }
-            }.runTaskTimer(Hcfcore.getInstance(), 0, 20);
 
 
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR! CONTACT DEVELOPER ASAP.");
         }
+
+        return true;
     }
 }

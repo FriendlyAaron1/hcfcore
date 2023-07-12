@@ -12,13 +12,31 @@ public class BalanceHandler {
 
 
     // these functions don't check the original amount, that has to be done before hand
-    // TODO: make it check the original amount
+    // TODO: make it check the original amount (maybe)
     public static void giveMoneyToPlayer(Player player, int amount) throws SQLException {
+        String sql = "UPDATE player_data SET balance= balance + ? WHERE player_id=?";
+        HcfSqlConnection conn = new HcfSqlConnection();
+        PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+        statement.setInt(1, amount);
+        statement.setString(2, player.getUniqueId().toString());
+        statement.executeUpdate();
 
+        System.out.println(statement);
+
+        conn.closeConnection();
     }
 
     public static void takeMoneyFromPlayer(Player player, int amount) throws SQLException {
+        String sql = "UPDATE player_data SET balance= balance - ? WHERE player_id=?";
+        HcfSqlConnection conn = new HcfSqlConnection();
+        PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+        statement.setInt(1, amount);
+        statement.setString(2, player.getUniqueId().toString());
+        statement.executeUpdate();
 
+        System.out.println(statement);
+
+        conn.closeConnection();
     }
 
     public static void takeMoneyFromFaction(UUID faction_id, int amount) throws SQLException {
@@ -48,7 +66,7 @@ public class BalanceHandler {
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
         statement.setString(1, player.getUniqueId().toString());
-        statement.executeUpdate();
+        statement.executeQuery();
 
         ResultSet results = statement.getResultSet();
         if (!results.next()) {

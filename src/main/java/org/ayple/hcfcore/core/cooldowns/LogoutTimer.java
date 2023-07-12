@@ -7,8 +7,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 public class LogoutTimer extends BukkitRunnable {
-    Player owner;
     int seconds_left;
+    Player owner;
     public int getSecondsLeft() { return this.seconds_left; }
 
 
@@ -21,11 +21,12 @@ public class LogoutTimer extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (seconds_left == 0) {
+        if (this.seconds_left == 0) {
             owner.kickPlayer("Logged out safely.");
             cancel();
         } else {
-            seconds_left--;
+            this.seconds_left--;
+            owner.sendMessage("Logging out in... " + Integer.toString(this.seconds_left));
         }
     }
 }

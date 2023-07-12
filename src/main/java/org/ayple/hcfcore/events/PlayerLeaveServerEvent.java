@@ -12,7 +12,7 @@ public class PlayerLeaveServerEvent implements Listener {
     public void onPlayerExit(PlayerQuitEvent event)
     {
         Player p = event.getPlayer();
-        SelectionsManager.clearAnySelectionPlayerHas(p);
+       // SelectionsManager.clearAnySelectionPlayerHas(p);
 
     }
 }

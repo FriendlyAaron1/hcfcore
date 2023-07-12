@@ -19,7 +19,7 @@ public class ClaimWand {
     }
 
     public static ItemStack makeNewWand() {
-        ItemStack item = new ItemStack(Material.WOODEN_HOE);
+        ItemStack item = new ItemStack(Material.STICK);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
@@ -40,7 +40,7 @@ public class ClaimWand {
     public static boolean isItemClaimWand(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            return (meta.isUnbreakable() && item.containsEnchantment(Enchantment.MENDING) && meta.getDisplayName().equals("CLAIM WAND"));
+            return (meta.isUnbreakable() && meta.getDisplayName().equals("CLAIM WAND"));
         }
 
         return false;

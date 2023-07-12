@@ -28,27 +28,36 @@ public class CommandFactionInvite extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public boolean perform(Player player, String[] args) {
         try {
-            if (args.length > 2) {
-                Player target_player = Bukkit.getPlayer(args[2]);
+            if (args.length >= 1) {
+                Player target_player = Bukkit.getPlayer(args[1]);
+                if (target_player == null) {
+                    player.sendMessage("That player is not online!");
+                    return true;
+                }
+
                 Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
 
                 if (player_faction == null) {
                     player.sendMessage("You are not in a faction!");
-                    return;
-
+                    return true;
                 }
 
-                FactionInviteManager.registerNewInvite(new FactionInvite(player_faction.getFactionID(),  target_player.getUniqueId()));
+                FactionInviteManager.registerNewInvite(player_faction.getFactionID(),  target_player.getUniqueId());
                 if (target_player.isOnline()) {
                     target_player.sendMessage(player_faction.getFactionName() + " has invited you!");
                 }
+
+                player.sendMessage("Invited " + target_player.getDisplayName() + " to the faction!");
+
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             player.sendMessage("SQL ERROR");
         }
 
+        return false;
     }
 }

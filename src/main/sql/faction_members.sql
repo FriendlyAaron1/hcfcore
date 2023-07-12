@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS `faction_members` (
 --    3 = leader, 2 = co-owner, 1 = officer, 0 = member
     `rank` SMALLINT NOT NULL DEFAULT 0,
 
-    FOREIGN KEY (`faction_id`) REFERENCES factions(`id`)
-)
+    FOREIGN KEY (`faction_id`) REFERENCES factions(`id`),
+    FOREIGN KEY (`player_uuid`) REFERENCES player_data(`player_id`)
+);
