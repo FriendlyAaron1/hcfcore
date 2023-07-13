@@ -9,6 +9,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldow
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\CooldownManager.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\EnderpearlCooldown.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\pvpclasses\ArcherClass.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionDeposit.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerJoinedServerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\faction\FactionInvite.java
@@ -23,6 +24,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\fac
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionFocus.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionMap.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionKick.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\BardEffectsEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandFaction.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerInteractEntity.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionBal.java
@@ -34,6 +36,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\fac
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\helpers\PlayerHelpers.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\ClaimsManager.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerMoveEvent.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandServerClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\ClaimPillar.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionJoin.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionPromote.java
@@ -44,10 +47,12 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\helpers\Conf
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionDisband.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerLeaveServerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerInteractedClaimEvent.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\pvpclasses\PvpClass.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\CombatTimer.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionCreate.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\serverclaim\SpawnClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerArmorChangeEvent.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\pvpclasses\BardClass.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandBalance.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionSetHome.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionWho.java

@@ -24,11 +24,13 @@ public class ClaimWand {
 
         if (meta != null) {
             meta.setDisplayName("CLAIM WAND");
-            meta.setUnbreakable(true);
+
+            // this was here in 1.12
+            //meta.setUnbreakable(true);
         }
 
         item.setItemMeta(meta);
-        item.addUnsafeEnchantment(Enchantment.MENDING, 10);
+        item.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
 
         return item;
     }
@@ -39,11 +41,12 @@ public class ClaimWand {
 
     public static boolean isItemClaimWand(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            return (meta.isUnbreakable() && meta.getDisplayName().equals("CLAIM WAND"));
+        if (meta == null || meta.getDisplayName() == null) {
+            return false;
         }
 
-        return false;
+        return (meta.getDisplayName().equals("CLAIM WAND") && (item.getEnchantments().get(Enchantment.DURABILITY) == 3));
+
     }
 
 }

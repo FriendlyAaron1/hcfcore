@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.commands.SubCommand;
+import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.FactionInviteManager;
 import org.ayple.hcfcore.core.faction.FactionManager;
@@ -32,6 +33,11 @@ public class CommandFactionSetHome extends SubCommand {
             Faction faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
             if (faction == null) {
                 player.sendMessage("You are not in a faction!");
+                return true;
+            }
+
+            if (!ClaimsManager.playerOwnsClaim(player)) {
+                player.sendMessage("You are not in your claim!");
                 return true;
             }
 

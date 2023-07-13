@@ -64,13 +64,23 @@ public class CommandFactionWho extends SubCommand {
             String members_size = Integer.toString(target_faction.getFactionMembersSize());
             String online_members = Integer.toString(target_faction.getOnlineMembers());
             Location hq = target_faction.getFactionHQ();
-            String hq_x = Double.toString(hq.getX());
-            String hq_z = Double.toString(hq.getZ());
+            String hq_x = null;
+            String hq_z = null;
+            if (hq != null) {
+                hq_x = Double.toString(hq.getX());
+                hq_z = Double.toString(hq.getZ());
+            }
+
             String dtr = Faction.DTR_FORMAT.format(target_faction.getFactionDTR());
             String balance = target_faction.getFactionBal().toString();
 
             player.sendMessage("-----------------------------------------------------");
-            player.sendMessage(ChatColor.GOLD + faction_name + "[" + online_members + "/" + members_size + "]" + ChatColor.YELLOW + " HQ: " + hq_x + ", " + hq_z);
+
+            if (hq != null) {
+                player.sendMessage(ChatColor.GOLD + faction_name + "[" + online_members + "/" + members_size + "]" + ChatColor.YELLOW + " HQ:    " + hq_x + ", " + hq_z);
+            } else {
+                player.sendMessage(ChatColor.GOLD + faction_name + "[" + online_members + "/" + members_size + "]" + ChatColor.YELLOW + " HQ:    Not set");
+            }
 
 
             // usernames

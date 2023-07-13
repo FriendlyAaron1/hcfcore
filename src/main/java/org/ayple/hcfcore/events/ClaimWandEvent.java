@@ -32,7 +32,7 @@ public class ClaimWandEvent implements Listener {
         // is the player holding a claim wand
         // are they in a faction? if not then return
         if (player.getWorld() != Bukkit.getWorld("world") && !player.hasPermission("hcfcore.admin")) return;
-        if (!ClaimWand.isItemClaimWand(player.getInventory().getItemInMainHand())) return;
+        if (!ClaimWand.isItemClaimWand(player.getInventory().getItemInHand())) return;
         if (!checkPlayerInFaction(player)) return;
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {

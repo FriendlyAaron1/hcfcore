@@ -59,8 +59,8 @@ public class BardEffectsEvent implements Listener {
 
                         if (player_faction.getFactionID().equals(target_faction.getFactionID()))
                         {
-                            BardClass.giveEffectToTargetPlayer(p.getInventory().getItemInMainHand().getType(), target_player);
-                            BardClass.giveEffectToTargetPlayer(p.getInventory().getItemInMainHand().getType(), p);
+                            BardClass.giveEffectToTargetPlayer(p.getInventory().getItemInHand().getType(), target_player);
+                            BardClass.giveEffectToTargetPlayer(p.getInventory().getItemInHand().getType(), p);
                         }
 
                     }

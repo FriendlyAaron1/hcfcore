@@ -1,7 +1,7 @@
 name: hcfcore
 version: '1.0-SNAPSHOT'
 main: org.ayple.hcfcore.Hcfcore
-api-version: '1.12.2'
+api-version: '1.8.8'
 authors: [Adam]
 commands:
   faction:
@@ -17,3 +17,7 @@ commands:
     description: "get your balance"
     usage: "/bal"
     aliases: [bal]
+
+  kit:
+    description: "get a kit"
+    usage: "/kit [kit name]"
