@@ -14,20 +14,14 @@ import java.sql.SQLException;
 public class CommandBalance implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
-            try {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
-                    int bal = BalanceHandler.getPlayerBalance(player);
-                    player.sendMessage("Balance: " + Integer.toString(bal));
-                }
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            int bal = BalanceHandler.getPlayerBalance(player);
+            player.sendMessage("Balance: " + Integer.toString(bal));
+        }
 
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("SQL ERROR GETTING COMMAND BALANCE. CONSULT DEVELOPER");
-            }
-        });
+
 
         return true;
     }
