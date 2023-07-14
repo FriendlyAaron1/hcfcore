@@ -1,8 +1,11 @@
 package org.ayple.hcfcore.commands.faction;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -24,33 +27,28 @@ public class CommandFactionRename extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        if (!(args.length > 1)) return false;
+    public void perform(Player player, String[] args) {
+        if (!(args.length > 1)) {
+            player.sendMessage(ChatColor.RED + getSyntax());
+            return;
+        }
+
         if (args[1].length() > 20) {
             player.sendMessage("name is too long");
         }
 
-        try {
-            Faction faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
-            if (faction == null) {
-                player.sendMessage("You're not in a faction!");
-                return true;
-            }
-
-            if (FactionManager.isPlayerLeader(faction, player.getUniqueId()) || FactionManager.isPlayerCoLeader(faction, player.getUniqueId())) {
-                FactionManager.renameFaction(faction.getFactionName(), args[1]);
-                player.sendMessage("Renamed faction!");
-                return true;
-            }
-
-            player.sendMessage("You must be leader or co-leader");
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL ERROR! CONSULT DEVELOPER ASAP");
-            return true;
+        Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+        if (faction == null) {
+            player.sendMessage("You're not in a faction!");
+            return;
         }
 
+        if (NewFactionManager.isPlayerLeader(faction, player.getUniqueId()) || NewFactionManager.isPlayerCoLeader(faction, player.getUniqueId())) {
+            NewFactionManager.renameFaction(faction.getFactionName(), args[1]);
+            player.sendMessage("Renamed faction!");
+            return;
+        }
+
+        player.sendMessage("You must be leader or co-leader");
     }
 }

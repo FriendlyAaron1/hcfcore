@@ -1,8 +1,12 @@
 package org.ayple.hcfcore.commands.faction;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.Faction;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -25,21 +29,20 @@ public class CommandFactionLeave extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        try {
-            String sql = "DELETE FROM faction_members WHERE player_uuid=?";
-            HcfSqlConnection conn = new HcfSqlConnection();
-            PreparedStatement statement = conn.getConnection().prepareStatement(sql);
-            statement.setString(1, player.getUniqueId().toString());
-            statement.executeUpdate();
-            conn.closeConnection();
+    public void perform(Player player, String[] args) {
+        Faction target_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
 
-            player.sendMessage("Successfully Left faction!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-
+        if (target_faction == null) {
+            player.sendMessage(ChatColor.RED + "You are not in a faction!");
+            return;
         }
 
-        return true;
+        if (NewFactionManager.isPlayerLeader(target_faction, player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "You cannot leave since you are the leader. Assign a new leader or /f disband");
+            return;
+        }
+
+        NewFactionManager.kickPlayerFromFaction(target_faction, player);
+        player.sendMessage(ChatColor.GREEN + "Left " + ChatColor.LIGHT_PURPLE + target_faction.getFactionName() + ChatColor.GREEN + "!");
     }
 }

@@ -2,14 +2,9 @@ package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
-import org.ayple.hcfcore.core.faction.FactionManager;
-import org.ayple.hcfcore.pvpclasses.BardClass;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.sql.SQLException;
 
 public class PlayerMoveEvent implements Listener {
 //    public Hashtable<UUID, Location> player_last_location = new Hashtable<UUID, Location>();

@@ -32,7 +32,7 @@ public class PotionRefillSignEvent implements Listener {
         if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
         if (e.getClickedBlock().getState() instanceof Sign) {
             Sign sign = (Sign) e.getClickedBlock().getState();
-            if (sign.getLine(1).equalsIgnoreCase(ChatColor.GOLD + "- POTION REFILL -")) {
+            if (sign.getLine(1).equalsIgnoreCase(ChatColor.GREEN + "RIGHT CLICK")) {
                 player.openInventory(getPotionRefillMenu());
             }
 

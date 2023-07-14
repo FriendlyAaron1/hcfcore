@@ -1,9 +1,10 @@
 package org.ayple.hcfcore.commands.faction;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.claims.SelectionsManager;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.items.ClaimWand;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -21,36 +22,31 @@ public class CommandFactionClaim extends SubCommand {
     }
 
     @Override
-    public String getSyntax() {
-        return "/f claim";
-    }
+    public String getSyntax() { return "/f claim"; }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        try {
-            if (FactionManager.playerInFaction(player.getUniqueId())) {
-                if (FactionManager.isPlayerLeader(player.getUniqueId())) {
-                    player.getInventory().addItem(ClaimWand.makeNewWand());
-                    player.sendMessage("You have recieved a claim wand!");
-                    return true;
-                }
+    public void perform(Player player, String[] args) {
+        if (NewFactionManager.playerInFaction(player.getUniqueId())) {
+            if (NewFactionManager.isPlayerLeader(player.getUniqueId())) {
+                player.getInventory().addItem(ClaimWand.makeNewWand());
+                player.sendMessage("You have recieved a claim wand!");
 
-                player.sendMessage("You must be leader to be able to claim!");
-                return false;
+                return;
             }
 
-            player.sendMessage("You are not in a faction. Create one with /f create [name]");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL ERROR! CONTACT DEVELOPER ASAP.");
+            player.sendMessage("You must be leader to be able to claim!");
+            return;
         }
+
+        player.sendMessage("You are not in a faction. Create one with /f create [name]");
+    }
+}
+
+
 
 //        if (player.getInventory().getItemInMainHand() == null) {
 //            player.getInventory().addItem(ClaimWand.makeNewWand());
 //            return;
 //        }
 
-        return true;
 
-    }
-}

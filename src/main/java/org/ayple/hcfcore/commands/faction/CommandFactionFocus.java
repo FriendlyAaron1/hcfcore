@@ -20,7 +20,7 @@ public class CommandFactionFocus extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        return false;
+    public void perform(Player player, String[] args) {
+        return;
     }
 }

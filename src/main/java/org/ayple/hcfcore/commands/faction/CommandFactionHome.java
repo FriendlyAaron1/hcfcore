@@ -4,10 +4,11 @@ import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 
@@ -28,32 +29,22 @@ public class CommandFactionHome extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        try {
-            Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
-            if (player_faction == null) {
-                player.sendMessage("You are not in a faction.");
-                return false;
-            }
-
-            Location hq = player_faction.getFactionHQ();
-            if (hq == null) {
-                player.sendMessage("Faction does not have a home set");
-                return true;
-            }
-
-
-            if (!CooldownManager.hasHomeTimer(player.getUniqueId())) {
-                CooldownManager.registerHomeTimer(player, hq);
-            }
-
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL ERROR! CONTACT DEVELOPER ASAP.");
+    public void perform(Player player, String[] args) {
+        Faction player_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+        if (player_faction == null) {
+            player.sendMessage(ChatColor.RED + "You are not in a faction.");
+            return;
         }
 
-        return true;
+        Location hq = player_faction.getFactionHQ();
+        if (hq == null) {
+            player.sendMessage(ChatColor.RED + "Faction does not have a home set");
+            return;
+        }
+
+
+        if (!CooldownManager.hasHomeTimer(player.getUniqueId())) {
+            CooldownManager.registerHomeTimer(player, hq);
+        }
     }
 }

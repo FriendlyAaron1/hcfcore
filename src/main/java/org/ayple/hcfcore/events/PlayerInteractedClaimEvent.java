@@ -37,6 +37,7 @@ public class PlayerInteractedClaimEvent implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+
         Faction player_faction = ClaimsManager.playerInClaim(player);
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (event.getClickedBlock() != null) {

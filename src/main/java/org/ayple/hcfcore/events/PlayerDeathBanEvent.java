@@ -1,8 +1,10 @@
 package org.ayple.hcfcore.events;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
+import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,24 +21,13 @@ public class PlayerDeathBanEvent implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = (Player) event.getEntity();
 
-        try {
-            if (player.getKiller() != null) {
-                Player killer = (Player) player.getKiller();
+        if (player.getKiller() != null) {
+            PlayerDataHandler.increasePlayerKillCount((Player) player.getKiller());
+        }
 
-                String sql = "UPDATE player_data SET kills = kills + 1 WHERE player_uuid=?";
-                HcfSqlConnection conn = new HcfSqlConnection();
-                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
-                statement.setString(1, killer.getUniqueId().toString());
-                conn.closeConnection();
-            }
-
-            Faction player_faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
-            if (player_faction != null) {
-                FactionManager.decreaseDTR(player_faction.getFactionID());
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Faction player_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+        if (player_faction != null) {
+            NewFactionManager.decreaseDTR(player_faction.getFactionID());
         }
 
         // //Since there are 1000 miliseconds in one second, 60 seconds in one minute,

@@ -2,23 +2,17 @@ package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.claims.*;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.items.ClaimWand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 
 // TODO: fix pillars
@@ -66,7 +60,6 @@ public class ClaimWandEvent implements Listener {
         }
 
         if (event.getAction() == Action.LEFT_CLICK_AIR && player.isSneaking()) {
-            try {
                 Location corner_1 = ClaimPillarManager.getFirstCornerAsLocation(player.getUniqueId());
                 Location corner_2 = ClaimPillarManager.getSecondCornerAsLocation(player.getUniqueId());
                 if (corner_1 == null) {
@@ -87,7 +80,13 @@ public class ClaimWandEvent implements Listener {
                     return;
                 }
 
-                ClaimsManager.newClaim(player, selection);
+                Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+                    try {
+                        ClaimsManager.newClaim(player, selection);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
 
                 // clear wand
                 removeClaimWand(player);
@@ -99,11 +98,6 @@ public class ClaimWandEvent implements Listener {
 
                 player.sendMessage("Claimed land!");
                 event.setCancelled(true);
-            } catch(SQLException e) {
-                player.sendMessage("SQL Error making claim! Consult developer immediately.");
-                e.printStackTrace();
-                return;
-            }
 
         }
 
@@ -186,17 +180,13 @@ public class ClaimWandEvent implements Listener {
 
 
     public boolean checkPlayerInFaction(Player player) {
-        try {
-            if (!FactionManager.playerInFaction(player.getUniqueId())) {
-                removeClaimWand(player);
-                player.sendMessage("You are not in a faction!");
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL Error when checking if player is in a faction. [FactionManager.playerInFaction]");
+
+        if (!NewFactionManager.playerInFaction(player.getUniqueId())) {
+            removeClaimWand(player);
+            player.sendMessage("You are not in a faction!");
             return false;
         }
+
 
         return true;
     }

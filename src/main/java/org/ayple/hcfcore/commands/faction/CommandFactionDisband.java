@@ -1,8 +1,11 @@
 package org.ayple.hcfcore.commands.faction;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -25,28 +28,20 @@ public class CommandFactionDisband extends SubCommand {
 
     // TODO: test this
     @Override
-    public boolean perform(Player player, String[] args) {
-        try {
-            Faction faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
-            if (faction == null) {
-                player.sendMessage("You are not in a faction!");
-                return true;
-            }
-
-
-            if (!FactionManager.isPlayerLeader(player.getUniqueId())) {
-                player.sendMessage("You need to be leader!");
-                return true;
-            }
-
-            FactionManager.disbandFaction(faction.getFactionID());
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL ERROR! CONSULT DEVELOPER ASAP.");
+    public void perform(Player player, String[] args) {
+        Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+        if (faction == null) {
+            player.sendMessage(ChatColor.RED + "You are not in a faction!");
+            return;
         }
 
-        return false;
+
+        if (!NewFactionManager.isPlayerLeader(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "You need to be leader!");
+            return;
+        }
+
+        NewFactionManager.disbandFaction(faction.getFactionID());
+
     }
 }

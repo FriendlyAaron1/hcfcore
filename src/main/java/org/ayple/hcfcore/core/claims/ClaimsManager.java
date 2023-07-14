@@ -2,56 +2,77 @@ package org.ayple.hcfcore.core.claims;
 
 import org.ayple.hcfcore.core.Cuboid;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.FactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.ayple.hcfcore.core.faction.LegacyFactionManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Array;
 import java.sql.*;
 import java.util.*;
 
 public class ClaimsManager {
 
     private static final String WILDERNESS = "wilderness";
-    private static HashSet<Claim> claims = new HashSet<Claim>();
+
+    // faction UUID
+    private static HashMap<UUID, Claim> claims = new HashMap<UUID, Claim>();
 
     // This is used to know what claims players go in and out of. This is done to
     // prevent spam of `playerInClaim`
     // first UUID is player id, second is claim id
     private static HashMap<UUID, UUID> player_location_claims = new HashMap<UUID, UUID>();
 
+
+    public static void removeClaim(UUID faction_id) {
+        claims.remove(faction_id);
+    }
+
     // this should be called if server is reset
     // gets all the stored claims data and turns it into claim objects
-    public static void loadClaims() throws SQLException {
-        String sql = "SELECT id, faction_name, corner_1_x, corner_1_z, corner_2_x, corner_2_z FROM factions";
-        HcfSqlConnection conn = new HcfSqlConnection();
-        Statement statement = conn.getConnection().createStatement();
-        statement.executeQuery(sql);
-
-        ResultSet results = statement.getResultSet();
-        while (results.next()) {
-            UUID owner_uuid = UUID.fromString(results.getString("id"));
-            Claim new_claim = new Claim(
-                    owner_uuid,
-                    results.getString("faction_name"),
-                    results.getInt("corner_1_x"),
-                    results.getInt("corner_1_z"),
-                    results.getInt("corner_2_x"),
-                    results.getInt("corner_2_z")
-            );
-
-            claims.add(new_claim);
+    public static void reloadClaims() {
+        claims.clear();
+        for (Faction faction : NewFactionManager.getFactions()) {
+            Claim fac_claim = faction.getClaim();
+            claims.put(faction.getFactionID(), fac_claim);
         }
 
-        conn.closeConnection();
-        System.out.println(claims);
+        // this code is only tested without the bukkit scheduler
+
+//        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+//            try {
+//                String sql = "SELECT id, faction_name, corner_1_x, corner_1_z, corner_2_x, corner_2_z FROM factions";
+//                HcfSqlConnection conn = new HcfSqlConnection();
+//                Statement statement = conn.getConnection().createStatement();
+//                statement.executeQuery(sql);
+//
+//                ResultSet results = statement.getResultSet();
+//                while (results.next()) {
+//                    UUID owner_uuid = UUID.fromString(results.getString("id"));
+//                    Claim new_claim = new Claim(
+//                            owner_uuid,
+//                            results.getString("faction_name"),
+//                            results.getInt("corner_1_x"),
+//                            results.getInt("corner_1_z"),
+//                            results.getInt("corner_2_x"),
+//                            results.getInt("corner_2_z")
+//                    );
+//
+//                    claims.add(new_claim);
+//                }
+//
+//                conn.closeConnection();
+//                System.out.println(claims);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
 
     }
 
     public static ArrayList<Cuboid> getAllClaimCuboids() {
         ArrayList<Cuboid> claims_cuboids = new ArrayList<Cuboid>();
-        for (Claim claim : claims) {
+        for (Claim claim : claims.values()) {
             claims_cuboids.add(claim.getCuboid());
         }
 
@@ -70,7 +91,7 @@ public class ClaimsManager {
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
 
-        Faction faction = FactionManager.getFactionFromPlayerID(player.getUniqueId());
+        Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
         if (faction == null) {
             System.out.println("Failed to get faction from player id in newClaim!");
             conn.closeConnection();
@@ -94,7 +115,7 @@ public class ClaimsManager {
 
 
         conn.closeConnection();
-        claims.add(new Claim(faction_id, faction.getFactionName(), selection.getPos1(), selection.getPos2()));
+        claims.put(faction_id, new Claim(faction_id, faction.getFactionName(), selection.getPos1(), selection.getPos2()));
     }
 
     // TODO: optimize this jesus fucking christ almighty 10/07/23
@@ -109,7 +130,7 @@ public class ClaimsManager {
 
         UUID stored_claim_id = player_location_claims.get(player_id);
 
-        for (Claim claim : claims) {
+        for (Claim claim : claims.values()) {
             if (claim.getCuboid().contains(player.getLocation())) {
                 UUID claim_id = claim.getOwnerFactionID();
 
@@ -122,6 +143,8 @@ public class ClaimsManager {
                 return;
             }
 
+
+            // TODO: make it a warzone claim if less than 'x' amount of blocks
             // set it to wilderness if not in claim
             player_location_claims.put(player_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()));
         }
@@ -134,17 +157,12 @@ public class ClaimsManager {
     }
 
     public static Faction playerInClaim(Player player) {
-        try {
-            for (Claim claim : claims) {
-                if (claim.getCuboid().contains(player.getLocation())) {
-                    return FactionManager.getFaction(claim.getOwnerFactionID());
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage("SQL ERROR CHECKING CLAIMS! [playerInClaim] function");
-        }
 
+        for (Claim claim : claims.values()) {
+            if (claim.getCuboid().contains(player.getLocation())) {
+                return NewFactionManager.getFaction(claim.getOwnerFactionID());
+            }
+        }
 
         return null;
     }
@@ -174,6 +192,7 @@ public class ClaimsManager {
 
 
     public static boolean isClaimSizeLegal(Cuboid claim) {
+        // essentially, turn it top down and get the area of that
         Location corner_1 = new Location(claim.getWorld(), claim.getLowerNE().getX(), 0, claim.getLowerNE().getZ());
         Location corner_2 = new Location(claim.getWorld(), claim.getUpperSW().getX(), 0, claim.getUpperSW().getZ());
         Cuboid flat_surface = new Cuboid(corner_1, corner_2);

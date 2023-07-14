@@ -28,10 +28,10 @@ public class CommandFactionMap extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
+    public void perform(Player player, String[] args) {
 
         player.sendMessage("COMING SOON!");
-        return true;
+
 
 //        ArrayList<Cuboid> claims =  ClaimsManager.getAllClaimCuboids();
 //

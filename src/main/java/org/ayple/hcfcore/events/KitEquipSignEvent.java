@@ -15,7 +15,7 @@ public class KitEquipSignEvent implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
         Player player = e.getPlayer();
-        if (!player.hasPermission("hcf.createkitsign")) return;
+        if (!player.hasPermission("hcf.create.kitsign")) return;
 
         if (e.getLine(0).equalsIgnoreCase("[Kit]")) {
             e.setLine(1, ChatColor.BLUE + e.getLine(1));
@@ -29,10 +29,10 @@ public class KitEquipSignEvent implements Listener {
         if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
         if (e.getClickedBlock().getState() instanceof Sign) {
             Sign sign = (Sign) e.getClickedBlock().getState();
-            if (sign.getLine(1).equalsIgnoreCase(ChatColor.GOLD + "Diamond")) {
+            if (sign.getLine(1).equals(ChatColor.BLUE + "Diamond")) {
                 KitManager.diamondkit.givePlayerKit(player);
             }
-            else if (sign.getLine(1).equalsIgnoreCase(ChatColor.GOLD + "Miner")) {
+            else if (sign.getLine(1).equals(ChatColor.BLUE + "Miner")) {
                 KitManager.minerkit.givePlayerKit(player);
             }
 

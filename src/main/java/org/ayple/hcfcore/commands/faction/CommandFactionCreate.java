@@ -1,13 +1,9 @@
 package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.faction.FactionManager;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-
-import java.sql.SQLException;
 
 public class CommandFactionCreate extends SubCommand {
 
@@ -27,33 +23,32 @@ public class CommandFactionCreate extends SubCommand {
     }
 
     @Override
-    public boolean perform(Player player, String[] args) {
-        try {
-            if (args.length > 1) {
-                if (args[1].length() > 20) {
-                    player.sendMessage("Name is too long. Must be shorter than 20 characters!");
-                    return false;
-                }
-
-                if (FactionManager.playerInFaction(player.getUniqueId())) {
-                    player.sendMessage("Already in a faction!");
-                    return false;
-                }
-
-                if (FactionManager.newFaction(args[1], player)) {
-                    player.sendMessage("Created faction!");
-                    return true;
-                }
-
-                player.sendMessage("Faction name is already taken!");
-                return false;
+    public void perform(Player player, String[] args) {
+        if (args.length > 1) {
+            if (args[1].length() >= 15) {
+                player.sendMessage("Name is too long. Maximum 15 characters!");
+                return;
             }
-        } catch (SQLException e) {
-            player.sendMessage("MYSQL error in faction");
-            e.printStackTrace();
+
+            if (args[1].length() < 3) {
+                player.sendMessage("Name is too short. Minimum 3 characters!");
+                return;
+            }
+
+            if (NewFactionManager.playerInFaction(player.getUniqueId())) {
+                player.sendMessage("Already in a faction!");
+                return;
+            }
+
+            if (NewFactionManager.createNewFaction(args[1], player)) {
+                player.sendMessage("Created faction!");
+                return;
+            }
+
+            player.sendMessage("Faction name is already taken!");
+            return;
         }
 
-        return false;
-
+        player.sendMessage(ChatColor.RED + getSyntax());
     }
 }

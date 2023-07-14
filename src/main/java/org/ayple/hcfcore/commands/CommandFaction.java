@@ -42,10 +42,7 @@ public class CommandFaction implements CommandExecutor {
         if (args.length > 0) {
             for (SubCommand subcommand : subcommands) {
                 if (args[0].equalsIgnoreCase(subcommand.getName())) {
-                    if (!subcommand.perform(player, args)) {
-                        player.sendMessage(subcommand.getSyntax());
-                    }
-
+                    subcommand.runCommand(player, args);
                     return true;
                 }
             }

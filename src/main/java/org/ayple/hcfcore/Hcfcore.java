@@ -5,6 +5,8 @@ import org.ayple.hcfcore.commands.CommandFaction;
 import org.ayple.hcfcore.commands.CommandKit;
 import org.ayple.hcfcore.commands.CommandLogout;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
+import org.ayple.hcfcore.core.faction.LegacyFactionManager;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.events.*;
 import org.ayple.hcfcore.helpers.ConfigHelper;
 import org.bukkit.plugin.PluginManager;
@@ -39,10 +41,12 @@ public final class Hcfcore extends JavaPlugin {
         ConfigHelper.getConfig().options().copyDefaults(true);
         ConfigHelper.save();
 
-        //KITMAP_MODE = ConfigHelper.getConfig().getBoolean("kitmap_mode");
+        KITMAP_MODE = ConfigHelper.getConfig().getBoolean("kitmap_mode");
 
         try {
-            ClaimsManager.loadClaims();
+            NewFactionManager.loadFactions();
+            ClaimsManager.reloadClaims();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
