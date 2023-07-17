@@ -28,12 +28,29 @@ public class KitEquipSignEvent implements Listener {
 
         if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
         if (e.getClickedBlock().getState() instanceof Sign) {
+
             Sign sign = (Sign) e.getClickedBlock().getState();
             if (sign.getLine(1).equals(ChatColor.BLUE + "Diamond")) {
                 KitManager.diamondkit.givePlayerKit(player);
+                player.getInventory().clear();
             }
+
             else if (sign.getLine(1).equals(ChatColor.BLUE + "Miner")) {
                 KitManager.minerkit.givePlayerKit(player);
+                player.getInventory().clear();
+
+            }
+
+            else if (sign.getLine(1).equals(ChatColor.BLUE + "Bard")) {
+                KitManager.bardkit.givePlayerKit(player);
+                player.getInventory().clear();
+
+            }
+
+            else if (sign.getLine(1).equals(ChatColor.BLUE + "Archer")) {
+                KitManager.archerkit.givePlayerKit(player);
+                player.getInventory().clear();
+
             }
 
         }

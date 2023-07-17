@@ -14,7 +14,7 @@ public class CommandLogout implements CommandExecutor {
         if (!(sender instanceof Player)) return true;
         Player player = (Player) sender;
 
-        if (!CooldownManager.hasLogoutTimer(player.getUniqueId())) {
+        if (!CooldownManager.hasLogoutTimer(player)) {
             CooldownManager.registerLogoutTimer(player);
         }
 

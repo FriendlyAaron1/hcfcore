@@ -5,6 +5,7 @@ import org.ayple.hcfcore.core.claims.*;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.items.ClaimWand;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,12 +35,17 @@ public class ClaimWandEvent implements Listener {
 
             Location pos = event.getClickedBlock().getLocation();
             if (ClaimsManager.blockInClaim(pos)) {
-                player.sendMessage("This block is already claimed!");
+                player.sendMessage(ChatColor.RED + "This block is already claimed!");
+                return;
+            }
+
+            if (checkBlockInClaimArea(pos)) {
+                player.sendMessage(ChatColor.RED + "You need to go 750 blocks out to claim!");
                 return;
             }
 
             ClaimPillarManager.addCorner1(player, (int) pos.getX(), (int) pos.getZ());
-            player.sendMessage("Set first position!");
+            player.sendMessage(ChatColor.GREEN + "Set first position!");
             event.setCancelled(true);
 
         }
@@ -49,12 +55,17 @@ public class ClaimWandEvent implements Listener {
 
             Location pos = event.getClickedBlock().getLocation();
             if (ClaimsManager.blockInClaim(pos)) {
-                player.sendMessage("This block is already claimed!");
+                player.sendMessage(ChatColor.RED + "This block is already claimed!");
+                return;
+            }
+
+            if (checkBlockInClaimArea(pos)) {
+                player.sendMessage(ChatColor.RED + "You need to go 750 blocks out to claim!");
                 return;
             }
 
             ClaimPillarManager.addCorner2(player, pos.getX(), pos.getZ());
-            player.sendMessage("Set second position!");
+            player.sendMessage(ChatColor.GREEN + "Set second position!");
             event.setCancelled(true);
 
         }
@@ -63,12 +74,12 @@ public class ClaimWandEvent implements Listener {
                 Location corner_1 = ClaimPillarManager.getFirstCornerAsLocation(player.getUniqueId());
                 Location corner_2 = ClaimPillarManager.getSecondCornerAsLocation(player.getUniqueId());
                 if (corner_1 == null) {
-                    player.sendMessage("First corner isn't set!");
+                    player.sendMessage(ChatColor.RED + "First corner isn't set!");
                     return;
                 }
 
                 if (corner_2 == null) {
-                    player.sendMessage("Second corner isn't set!");
+                    player.sendMessage(ChatColor.RED + "Second corner isn't set!");
                     return;
                 }
 
@@ -80,6 +91,8 @@ public class ClaimWandEvent implements Listener {
                     return;
                 }
 
+
+                // TODO: look into this as i feel it may cause errors - 16/07/23
                 Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
                     try {
                         ClaimsManager.newClaim(player, selection);
@@ -189,5 +202,9 @@ public class ClaimWandEvent implements Listener {
 
 
         return true;
+    }
+
+    private static boolean checkBlockInClaimArea(Location location) {
+        return (location.getX() >= 750 && location.getX() <= -750) && (location.getZ() <= -750 && location.getZ() >= 750);
     }
 }

@@ -4,8 +4,11 @@ import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +21,6 @@ import java.util.UUID;
 public class Faction {
 
     public static final DecimalFormat DTR_FORMAT = new DecimalFormat("0.00");
-
 
     private final UUID factionID;
     public UUID getFactionID() { return this.factionID; }
@@ -72,8 +74,6 @@ public class Faction {
         }
 
         factionMembers.put(player_id, rank);
-
-
     }
 
     public void changeFactionMemberRank(UUID player_id, int rank) {

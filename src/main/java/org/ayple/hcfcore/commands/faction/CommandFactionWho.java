@@ -64,8 +64,8 @@ public class CommandFactionWho extends SubCommand {
         String hq_x = null;
         String hq_z = null;
         if (hq != null) {
-            hq_x = Double.toString(hq.getX());
-            hq_z = Double.toString(hq.getZ());
+            hq_x = Integer.toString((int) hq.getX());
+            hq_z = Integer.toString((int) hq.getZ());
         }
 
         String dtr = Faction.DTR_FORMAT.format(target_faction.getFactionDTR());

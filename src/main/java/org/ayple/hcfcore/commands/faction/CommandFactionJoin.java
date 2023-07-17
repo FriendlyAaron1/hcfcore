@@ -44,9 +44,15 @@ public class CommandFactionJoin extends SubCommand {
 
         Faction target_faction = NewFactionManager.getFaction(args[1]);
         if (target_faction == null) {
-            player.sendMessage("That faction doesnt exist");
+            player.sendMessage("That faction doesn't exist");
             return;
         }
+
+        if (!target_faction.getFactionInvites().contains(player.getUniqueId())) {
+            player.sendMessage("You do not have an invite!");
+            return;
+        }
+
 
         FactionInviteManager.onPlayerJoinFaction(target_faction.getFactionID(), player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "Joined " + ChatColor.LIGHT_PURPLE + target_faction.getFactionName() + ChatColor.GREEN + "!");

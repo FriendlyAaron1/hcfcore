@@ -26,6 +26,25 @@ public class Claim {
         return this.bounding_box;
     }
 
+    public Claim(World world, String faction_name, int corner_1_x, int corner_1_z, int corner_2_x, int corner_2_z) {
+        this.corner_1 = new Location(world, corner_1_x, 0, corner_1_z);
+        this.corner_2 = new Location(world, corner_2_x, world.getMaxHeight(), corner_2_z);
+        this.owner_faction_id = null;
+        this.faction_name = faction_name;
+
+        this.bounding_box = new Cuboid(this.corner_1, this.corner_2);
+    }
+
+    public Claim(World world, String faction_name, Location corner_1, Location corner_2) {
+        this.corner_1 = corner_1;
+        this.corner_2 = corner_2;
+        this.owner_faction_id = null;
+        this.faction_name = faction_name;
+
+        this.bounding_box = new Cuboid(this.corner_1, this.corner_2);
+    }
+
+
     public Claim(UUID owner_faction_id, String faction_name, int corner_1_x, int corner_1_z, int corner_2_x, int corner_2_z) {
         World world = Bukkit.getWorld("world");
         this.corner_1 = new Location(world, corner_1_x, 0, corner_1_z);

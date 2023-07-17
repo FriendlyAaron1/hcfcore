@@ -40,7 +40,7 @@ public class ClaimPillar {
     }
 
     public void placePillar() {
-        for (int y = 70; y < 100; y++) {
+        for (int y = 50; y < 160; y++) {
             Location pos = new Location(world, this.x, y, this.z);
             Block block = world.getBlockAt(pos);
 

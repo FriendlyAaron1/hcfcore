@@ -28,11 +28,11 @@ public class PlayerMoveEvent implements Listener {
 
         // cancel home timer if they move
         if (CooldownManager.hasHomeTimer(p.getUniqueId())) {
-            CooldownManager.cancelHomeTimer(p.getUniqueId());
+            CooldownManager.cancelHomeTimer(p);
         }
 
-        if (CooldownManager.hasLogoutTimer(p.getUniqueId())) {
-            CooldownManager.cancelLogoutTimer(p.getUniqueId());
+        if (CooldownManager.hasLogoutTimer(p)) {
+            CooldownManager.cancelLogoutTimer(p);
         }
 
 

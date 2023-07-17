@@ -19,13 +19,23 @@ public class CooldownManager {
     private static Hashtable<UUID, BukkitRunnable> logoutTimer = new Hashtable<UUID, BukkitRunnable>(); // logout timers
 
 
-    public static void registerEnderpearlCooldown(UUID player_id) {
-        enderpearlCooldowns.remove(player_id); // aka reset the timer
-        enderpearlCooldowns.put(player_id, new EnderpearlCooldown(player_id));
+    public static void registerEnderpearlCooldown(Player player_id) {
+        enderpearlCooldowns.put(player_id.getUniqueId(), new EnderpearlCooldown(player_id));
     }
 
-    public static void onFinishedEnderpearlCooldown(UUID player_id) {
-        enderpearlCooldowns.remove(player_id);
+    public static int getSecondsLeftOfEnderpearlCooldown(UUID player_id) {
+        EnderpearlCooldown cooldown = (EnderpearlCooldown) enderpearlCooldowns.get(player_id);
+        if (cooldown == null) {
+            System.out.println("Failed to get the seconds left of enderpearl cooldown?");
+            return 0;
+        }
+
+        return cooldown.getSecondsLeft();
+
+    }
+
+    public static void onFinishedEnderpearlCooldown(Player player) {
+        enderpearlCooldowns.remove(player.getUniqueId());
     }
 
     public static boolean hasEnderpearlCooldown(UUID player_id) {
@@ -36,12 +46,13 @@ public class CooldownManager {
         homeTimers.put(player.getUniqueId(), new HomeTimer(player, hq));
     }
 
-    public static void onFinishedHomeTimer(UUID player_id) {
-        homeTimers.remove(player_id);
+    public static void onFinishedHomeTimer(Player player_id) {
+        homeTimers.remove(player_id.getUniqueId());
     }
 
-    public static void cancelHomeTimer(UUID player_id) {
-        homeTimers.get(player_id).cancel();
+    public static void cancelHomeTimer(Player player_id) {
+        homeTimers.get(player_id.getUniqueId()).cancel();
+        homeTimers.remove(player_id.getUniqueId());
     }
 
     public static boolean hasHomeTimer(UUID player_id) {
@@ -49,11 +60,11 @@ public class CooldownManager {
     }
 
     public static void registerCombatTimer(Player player) {
-        combatCooldowns.put(player.getUniqueId(), new CombatTimer(player.getUniqueId()));
+        combatCooldowns.put(player.getUniqueId(), new CombatTimer(player));
     }
 
-    public static void onCombatTimerOver(UUID player_id) {
-        combatCooldowns.remove(player_id);
+    public static void onCombatTimerOver(Player player_id) {
+        combatCooldowns.remove(player_id.getUniqueId());
     }
 
     public static boolean hasCombatTimer(UUID player_id) {
@@ -68,12 +79,13 @@ public class CooldownManager {
         logoutTimer.remove(player_id);
     }
 
-    public static boolean hasLogoutTimer(UUID player_id) {
-        return logoutTimer.containsKey(player_id);
+    public static boolean hasLogoutTimer(Player player_id) {
+        return logoutTimer.containsKey(player_id.getUniqueId());
     }
 
-    public static void cancelLogoutTimer(UUID player_id) {
-        logoutTimer.get(player_id).cancel();
+    public static void cancelLogoutTimer(Player player_id) {
+        logoutTimer.get(player_id.getUniqueId()).cancel();
+        logoutTimer.remove(player_id.getUniqueId());
     }
 
 

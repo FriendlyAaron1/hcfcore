@@ -1,4 +1,6 @@
 package org.ayple.hcfcore.events;
 
-public class CombatLoggerEvent {
+import org.bukkit.event.Listener;
+
+public class CombatLoggerEvent implements Listener {
 }

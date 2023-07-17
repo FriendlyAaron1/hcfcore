@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.commands;
 
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,9 +14,16 @@ public class CommandServerClaim implements CommandExecutor {
         if (!(sender instanceof Player)) return true;
         Player player = (Player) sender;
 
-        if (!CooldownManager.hasLogoutTimer(player.getUniqueId())) {
-            CooldownManager.registerLogoutTimer(player);
+        if (!player.hasPermission("hcf.core.command.serverclaim")) {
+            player.sendMessage(ChatColor.RED + "No permission!");
+            return true;
         }
+
+        if (args.length == 0) {
+            return false;
+        }
+
+
 
         return true;
     }

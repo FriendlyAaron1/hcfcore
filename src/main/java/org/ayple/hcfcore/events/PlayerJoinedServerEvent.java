@@ -1,5 +1,8 @@
 package org.ayple.hcfcore.events;
 
+import org.ayple.hcfcore.core.faction.Faction;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.ayple.hcfcore.core.scoreboard.ServerScoreboard;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.ChatColor;
@@ -19,21 +22,19 @@ import java.sql.Statement;
 public class PlayerJoinedServerEvent implements Listener {
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event)
-    {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        try {
-            if (!PlayerDataHandler.playerLoggedInBefore(player.getUniqueId())) {
-                PlayerDataHandler.onLoginFirstTime(player.getUniqueId());
-                giveStarterItems(player);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            player.sendMessage(ChatColor.RED + "SQL ERROR!");
+        if (!PlayerDataHandler.playerLoggedInBefore(player.getUniqueId())) {
+            PlayerDataHandler.onLoginFirstTime(player.getUniqueId());
+            giveStarterItems(player);
         }
 
+        player.setScoreboard(ServerScoreboard.newScoreboard());
+        Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+        if (faction != null) {
+            player.setDisplayName(ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + player.getDisplayName());
+        }
 
     }
 
@@ -44,7 +45,7 @@ public class PlayerJoinedServerEvent implements Listener {
         steak.setAmount(32);
         player.getInventory().addItem(steak);
         player.getInventory().addItem(fishing_rod);
-        player.sendMessage("Welcome to the server for the first time!");
+        player.sendMessage(ChatColor.GOLD + "Welcome to the server for the first time!");
     }
 
 

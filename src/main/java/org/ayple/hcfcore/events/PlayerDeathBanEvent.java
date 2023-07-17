@@ -30,6 +30,8 @@ public class PlayerDeathBanEvent implements Listener {
             NewFactionManager.decreaseDTR(player_faction.getFactionID());
         }
 
+        if (Hcfcore.getInstance().KITMAP_MODE) return;
+
         // //Since there are 1000 miliseconds in one second, 60 seconds in one minute,
         // and 60 minutes in an hour,  by adding 60*60*1000 to the current time,
         // you are adding an hour to the bantime.

@@ -58,14 +58,35 @@ public class NewFactionManager {
                 claim = new Claim(id, faction_name, corner_1_x, corner_1_z, corner_2_x, corner_2_z);
             }
 
-            factions.put(id, new Faction(id, faction_name, dtr, bal, hq, claim));
+            Faction faction = new Faction(id, faction_name, dtr, bal, hq, claim);
+
+            sql = "SELECT player_uuid, `rank` FROM faction_members WHERE faction_id=?";
+            HcfSqlConnection conn2 = new HcfSqlConnection();
+            PreparedStatement statement = conn2.getConnection().prepareStatement(sql);
+            statement.setString(1, id.toString());
+            ResultSet faction_members_results = statement.executeQuery();
+
+            while (faction_members_results.next()) {
+                UUID player_id = UUID.fromString(faction_members_results.getString("player_uuid"));
+                int rank = faction_members_results.getInt("rank");
+                faction.addFactionMember(player_id, rank);
+            }
+
+
+
+            factions.put(id, faction);
         }
 
 
 
+        System.out.println(factions.toString());
 
         conn.closeConnection();
     }
+
+//    private static void getAllFactionMembers() {
+//
+//    }
 
     public static boolean playerInFaction(UUID player_id) {
         for (Faction faction : factions.values()) {
@@ -99,7 +120,8 @@ public class NewFactionManager {
 
     public static Faction getFaction(String faction_name) {
         for (Faction faction : factions.values()) {
-            if (faction.getFactionName() == faction_name) {
+            System.out.println(faction.getFactionName());
+            if (faction.getFactionName().equals( faction_name)) {
                 return faction;
             }
         }
@@ -131,15 +153,16 @@ public class NewFactionManager {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
 
             try {
-                String sql = "INSERT INTO factions (faction_id, faction_name) VALUES (?, ?)";
+                String sql = "INSERT INTO factions (id, faction_name) VALUES (?, ?)";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
-                statement.setString(1, faction_name);
+                statement.setString(1, faction_id.toString());
+                statement.setString(2, faction_name);
                 statement.executeUpdate();
                 System.out.println(statement.toString());
                 conn.closeConnection();
 
-                sql = "INSERT INTO faction_members VALUES (?, ?, 3)";
+                sql = "INSERT INTO faction_members (faction_id, player_uuid, `rank`) VALUES (?, ?, 3)";
                 conn = new HcfSqlConnection();
                 statement = conn.getConnection().prepareStatement(sql);
                 statement.setString(1, faction_id.toString());
@@ -154,14 +177,17 @@ public class NewFactionManager {
             }
         });
 
-        factions.put(faction_id, new Faction(faction_id, faction_name, 1.01f, 0, null, null));
+        Faction new_faction = new Faction(faction_id, faction_name, 1.01f, 0, null, null);
+        new_faction.addFactionMember(leader.getUniqueId(), 3);
+        factions.put(faction_id, new_faction);
+        System.out.println(factions.toString());
         return !sql_had_error.get();
     }
 
     public static void disbandFaction(UUID faction_id) {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
-                String sql = "DROP FROM factions WHERE id=?";
+                String sql = "DELETE FROM factions WHERE id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
                 statement.setString(1, faction_id.toString());
@@ -296,8 +322,8 @@ public class NewFactionManager {
                 String sql = "UPDATE factions SET faction_name = ? WHERE id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
-                statement.setString(0, new_name);
-                statement.setString(1, faction.getFactionID().toString());
+                statement.setString(1, new_name);
+                statement.setString(2, faction.getFactionID().toString());
                 statement.executeUpdate();
 
                 conn.closeConnection();
@@ -319,13 +345,14 @@ public class NewFactionManager {
 
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
-                String sql = "UPDATE factions SET faction_hq_x = ?, faction_hq_y, = ?, faction_hq_z = ? WHERE id=?";
+                String sql = "UPDATE factions SET faction_hq_x = ?, faction_hq_y = ?, faction_hq_z = ? WHERE id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
-                statement.setInt(0, (int) location.getX());
-                statement.setInt(1, (int) location.getY());
-                statement.setInt(2, (int) location.getZ());
-                statement.setString(3, faction.getFactionID().toString());
+                System.out.println(statement);
+                statement.setInt(1, (int) location.getX());
+                statement.setInt(2, (int) location.getY());
+                statement.setInt(3, (int) location.getZ());
+                statement.setString(4, faction.getFactionID().toString());
                 statement.executeUpdate();
 
                 conn.closeConnection();

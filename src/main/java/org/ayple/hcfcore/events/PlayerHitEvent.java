@@ -1,6 +1,8 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.claims.ClaimsManager;
+import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
@@ -21,6 +23,14 @@ public class PlayerHitEvent implements Listener {
             Player whoWasHit = (Player) event.getEntity();
             Player whoHit = (Player) event.getDamager();
 
+
+            Faction faction = ClaimsManager.playerInClaim(whoWasHit.getPlayer());
+            if (faction != null && faction.getFactionID() == SpawnClaim.SPAWN_UUID) {
+                whoHit.sendMessage(ChatColor.GREEN + "Cannot hurt other players in spawn!");
+                event.setCancelled(true);
+                return;
+            }
+
             if (checkSameFaction(whoWasHit, whoHit)) {
                 whoHit.sendMessage(ChatColor.RED + "Cannot hurt " + ChatColor.GREEN + whoWasHit.getDisplayName() + ChatColor.RED + "!");
                 event.setCancelled(true);
@@ -33,17 +43,17 @@ public class PlayerHitEvent implements Listener {
 
             // cancel home timers
             if (CooldownManager.hasHomeTimer(whoWasHit.getUniqueId()))
-                    CooldownManager.cancelHomeTimer(whoWasHit.getUniqueId());
+                    CooldownManager.cancelHomeTimer(whoWasHit);
 
             if (CooldownManager.hasHomeTimer(whoHit.getUniqueId()))
-                CooldownManager.cancelHomeTimer(whoHit.getUniqueId());
+                CooldownManager.cancelHomeTimer(whoHit);
 
             // cancel logout timers
-            if (CooldownManager.hasLogoutTimer(whoWasHit.getUniqueId()))
-                CooldownManager.cancelLogoutTimer(whoWasHit.getUniqueId());
+            if (CooldownManager.hasLogoutTimer(whoWasHit))
+                CooldownManager.cancelLogoutTimer(whoWasHit);
 
-            if (CooldownManager.hasLogoutTimer(whoHit.getUniqueId()))
-                CooldownManager.cancelLogoutTimer(whoHit.getUniqueId());
+            if (CooldownManager.hasLogoutTimer(whoHit))
+                CooldownManager.cancelLogoutTimer(whoHit);
         }
     }
 
@@ -55,11 +65,6 @@ public class PlayerHitEvent implements Listener {
             return false;
         }
 
-        if (who_hit_faction.getFactionID() == who_was_hit_faction.getFactionID()) {
-            return true;
-        }
-
-
-        return false;
+        return who_hit_faction.getFactionID() == who_was_hit_faction.getFactionID();
     }
 }

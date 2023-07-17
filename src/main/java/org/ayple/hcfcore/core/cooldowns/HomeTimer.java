@@ -1,9 +1,11 @@
 package org.ayple.hcfcore.core.cooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Objective;
 
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class HomeTimer extends BukkitRunnable {
     private Player owner;
     private Location hq;
+    private Objective objective;
 
     private int seconds_left;
     public int getSecondsLeft() { return this.seconds_left; }
@@ -26,17 +29,19 @@ public class HomeTimer extends BukkitRunnable {
         this.seconds_left = 20;
         this.hq = hq;
         this.runTaskTimer(Hcfcore.getInstance(), 0, 20);
+        this.objective =  this.owner.getScoreboard().getObjective("scoreboard");
 
     }
 
     @Override
     public void run() {
         if (seconds_left == 0) {
-            CooldownManager.onFinishedHomeTimer(owner.getUniqueId());
+            CooldownManager.onFinishedHomeTimer(owner);
+            this.objective.getScoreboard().resetScores(ChatColor.GREEN + "Home Timer:");
             owner.teleport(hq);
             cancel();
         } else {
-            owner.sendMessage("Teleporing home in " + Integer.toString(seconds_left) + " seconds!");
+            objective.getScore(ChatColor.GREEN + "Home Timer:").setScore(seconds_left);
             seconds_left--;
         }
     }

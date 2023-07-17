@@ -6,6 +6,7 @@ import org.ayple.hcfcore.core.BalanceHandler;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -31,19 +32,30 @@ public class CommandFactionWithdraw extends SubCommand {
         if (args.length >= 2) {
             Faction player_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
             if (player_faction == null) {
-                player.sendMessage("You are not in a faction!");
+                player.sendMessage(ChatColor.RED + "You are not in a faction!");
                 return;
             }
 
             int faction_bal = player_faction.getFactionBal();
-            int amount = Integer.parseInt(args[1]);
+
+            int amount;
+
+            if (args[1].equalsIgnoreCase("all")) {
+                amount = BalanceHandler.getPlayerBalance(player);
+            } else {
+                amount = Integer.parseInt(args[1]);
+            }
+
             //int player_bal = BalanceHandler.getPlayerBalance(player);
 
             if (faction_bal >= amount) {
                 BalanceHandler.giveMoneyToPlayer(player, amount);
                 BalanceHandler.takeMoneyFromFaction(player_faction.getFactionID(), amount);
+                player.sendMessage(ChatColor.GREEN + "Withdrew $" + Integer.toString(amount) + " from the faction balance!");
                 return;
             }
+
+            player.sendMessage(ChatColor.RED + "Insufficient funds!");
 
         }
 

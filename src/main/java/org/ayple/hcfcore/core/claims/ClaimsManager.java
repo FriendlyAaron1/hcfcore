@@ -1,10 +1,11 @@
 package org.ayple.hcfcore.core.claims;
 
 import org.ayple.hcfcore.core.Cuboid;
+import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
-import org.ayple.hcfcore.core.faction.LegacyFactionManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -13,9 +14,11 @@ import java.util.*;
 
 public class ClaimsManager {
 
-    private static final String WILDERNESS = "wilderness";
+    public static final String WILDERNESS = "wilderness";
+    public static final String WARZONE = "warzone";
 
     // faction UUID
+    // if faction UUID is
     private static HashMap<UUID, Claim> claims = new HashMap<UUID, Claim>();
 
     // This is used to know what claims players go in and out of. This is done to
@@ -26,6 +29,10 @@ public class ClaimsManager {
 
     public static void removeClaim(UUID faction_id) {
         claims.remove(faction_id);
+    }
+
+    public static void registerClaim(Claim claim) {
+        claims.put(claim.getOwnerFactionID(), claim);
     }
 
     // this should be called if server is reset
@@ -129,14 +136,25 @@ public class ClaimsManager {
         }
 
         UUID stored_claim_id = player_location_claims.get(player_id);
+        boolean stored_in_wilderness = Objects.equals(stored_claim_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()));
+        boolean stored_in_warzone = Objects.equals(stored_claim_id, UUID.nameUUIDFromBytes(WARZONE.getBytes()));
 
+
+        // loops through every claim and checks if teh players in it and then
+        // stores the value, if no claimis fount then it's set to eitehr wilderness
+        // or warzone
         for (Claim claim : claims.values()) {
+            if (claim.getCuboid() == null) return;
             if (claim.getCuboid().contains(player.getLocation())) {
                 UUID claim_id = claim.getOwnerFactionID();
 
                 // players moved into new claim
                 if (claim_id != stored_claim_id) {
-                    player.sendMessage("Now entering " + claim.getFactionName() + "'s claim!");
+                    if (claim_id == SpawnClaim.SPAWN_UUID) {
+                        player.sendMessage(ChatColor.GREEN + "Now entering Spawn!");
+                    } else {
+                        player.sendMessage(ChatColor.GREEN + "Now entering " + ChatColor.RED + claim.getFactionName() + ChatColor.GREEN + "'s claim!");
+                    }
                 }
 
                 player_location_claims.put(player_id, claim_id);
@@ -144,17 +162,49 @@ public class ClaimsManager {
             }
 
 
-            // TODO: make it a warzone claim if less than 'x' amount of blocks
-            // set it to wilderness if not in claim
-            player_location_claims.put(player_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()));
+
+
+            if (playerInWarzone(player)) {
+                player_location_claims.put(player_id, UUID.nameUUIDFromBytes(WARZONE.getBytes()));
+            } else {
+                player_location_claims.put(player_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()));
+            }
+
+
+//            player_location_claims.put(player_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()));
+
         }
 
-        if (!Objects.equals(stored_claim_id, UUID.nameUUIDFromBytes(WILDERNESS.getBytes()))) {
-            player.sendMessage("Now entering Wilderness!");
+
+//        System.out.println("Warzone: " + stored_in_warzone);
+//        System.out.println("Wildness: " + stored_in_wilderness);
+//        System.out.println("Currently in: " + player_location_claims.get(player_id).toString());
+
+        //if last place player was in was warzone and now in wilderness
+        if (!stored_in_wilderness && Objects.equals(player_location_claims.get(player_id), UUID.nameUUIDFromBytes(WILDERNESS.getBytes()))) {
+            player.sendMessage(ChatColor.GREEN + "Now entering Wilderness!");
+            return;
         }
+
+        if (!stored_in_warzone && Objects.equals(player_location_claims.get(player_id), UUID.nameUUIDFromBytes(WARZONE.getBytes()))) {
+            player.sendMessage(ChatColor.RED + "Now entering Warzone!");
+        }
+
+//        if (!stored_in_wilderness || !stored_in_warzone) {
+//            if (playerInWarzone(player)) {
+//            } else {
+//                player.sendMessage(ChatColor.GREEN + "Now entering Wilderness!");
+//            }
+//        }
 
 
     }
+
+    private static boolean playerInWarzone(Player player) {
+        return player.getLocation().getX() <= 250 && player.getLocation().getX() >= -250 && player.getLocation().getZ() >= -250 && player.getLocation().getZ() <= 250;
+    }
+
+
 
     public static Faction playerInClaim(Player player) {
 
@@ -168,6 +218,7 @@ public class ClaimsManager {
     }
 
     public static boolean playerOwnsClaim(Player player) {
+
         Faction faction = playerInClaim(player);
         if (faction == null) {
             return false;
