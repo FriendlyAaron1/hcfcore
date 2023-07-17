@@ -19,6 +19,8 @@ import org.bukkit.potion.PotionEffectType;
 public class PlayerArmorChangeEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerClickInventory(InventoryClickEvent event) {
+        if (!event.isLeftClick()) return;
+
         Player player = (Player) event.getWhoClicked();
 
         if (player != null) {

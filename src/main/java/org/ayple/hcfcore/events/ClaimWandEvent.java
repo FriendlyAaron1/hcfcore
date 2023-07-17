@@ -29,17 +29,18 @@ public class ClaimWandEvent implements Listener {
         if (player.getWorld() != Bukkit.getWorld("world") && !player.hasPermission("hcfcore.admin")) return;
         if (!ClaimWand.isItemClaimWand(player.getInventory().getItemInHand())) return;
         if (!checkPlayerInFaction(player)) return;
+        if (NewFactionManager.getFactionFromPlayerID(player.getUniqueId()).getClaim() != null) {
+            player.sendMessage(ChatColor.RED + "You already have a claim!");
+        }
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            System.out.println("left clicked floor with claim wand!");
-
             Location pos = event.getClickedBlock().getLocation();
             if (ClaimsManager.blockInClaim(pos)) {
                 player.sendMessage(ChatColor.RED + "This block is already claimed!");
                 return;
             }
 
-            if (checkBlockInClaimArea(pos)) {
+            if (!checkBlockInClaimArea(pos)) {
                 player.sendMessage(ChatColor.RED + "You need to go 750 blocks out to claim!");
                 return;
             }
@@ -51,15 +52,13 @@ public class ClaimWandEvent implements Listener {
         }
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            System.out.println("right clicked floor with claim wand!");
-
             Location pos = event.getClickedBlock().getLocation();
             if (ClaimsManager.blockInClaim(pos)) {
                 player.sendMessage(ChatColor.RED + "This block is already claimed!");
                 return;
             }
 
-            if (checkBlockInClaimArea(pos)) {
+            if (!checkBlockInClaimArea(pos)) {
                 player.sendMessage(ChatColor.RED + "You need to go 750 blocks out to claim!");
                 return;
             }
@@ -109,7 +108,7 @@ public class ClaimWandEvent implements Listener {
                 ClaimPillarManager.removeCorner1Pillar(player);
                 ClaimPillarManager.removeCorner2Pillar(player);
 
-                player.sendMessage("Claimed land!");
+                player.sendMessage(ChatColor.GREEN + "Claimed land!");
                 event.setCancelled(true);
 
         }

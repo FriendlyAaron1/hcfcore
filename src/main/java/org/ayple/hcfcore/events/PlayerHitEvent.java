@@ -1,19 +1,16 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-
-import java.sql.SQLException;
 
 // e.getEntity() instanceof Player && e.getDamager() instanceof Player
 public class PlayerHitEvent implements Listener {
@@ -24,18 +21,22 @@ public class PlayerHitEvent implements Listener {
             Player whoHit = (Player) event.getDamager();
 
 
-            Faction faction = ClaimsManager.playerInClaim(whoWasHit.getPlayer());
-            if (faction != null && faction.getFactionID() == SpawnClaim.SPAWN_UUID) {
-                whoHit.sendMessage(ChatColor.GREEN + "Cannot hurt other players in spawn!");
-                event.setCancelled(true);
-                return;
+            Claim player_in_claim = ClaimsManager.getClaimPlayerIn(whoWasHit.getPlayer());
+            if (player_in_claim != null) {
+                if (player_in_claim.isClaimSpawn()) {
+                    whoHit.sendMessage(ChatColor.GREEN + "Cannot hurt other players in spawn!");
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (checkSameFaction(whoWasHit, whoHit)) {
+                    whoHit.sendMessage(ChatColor.RED + "Cannot hurt " + ChatColor.GREEN + whoWasHit.getDisplayName() + ChatColor.RED + "!");
+                    event.setCancelled(true);
+                    return;
+                }
             }
 
-            if (checkSameFaction(whoWasHit, whoHit)) {
-                whoHit.sendMessage(ChatColor.RED + "Cannot hurt " + ChatColor.GREEN + whoWasHit.getDisplayName() + ChatColor.RED + "!");
-                event.setCancelled(true);
-                return;
-            }
+
 
 
             CooldownManager.registerCombatTimer(whoHit.getPlayer());

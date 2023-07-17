@@ -123,6 +123,7 @@ public class Faction {
     public void removeFactionInvite(UUID player_uuid) { factionInvites.remove(player_uuid); }
 
 
+
     public Faction(UUID faction_id, String faction_name, float dtr, int bal, Location faction_hq, Claim claim)  {
         this.factionID = faction_id;
         this.factionName = faction_name;

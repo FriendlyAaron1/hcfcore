@@ -1,14 +1,10 @@
 package org.ayple.hcfcore.commands.faction;
 
-import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.sql.SQLException;
 
 public class CommandFactionSetHome extends SubCommand {
     @Override
@@ -34,7 +30,7 @@ public class CommandFactionSetHome extends SubCommand {
             return;
         }
 
-        if (!ClaimsManager.playerOwnsClaim(player)) {
+        if (!ClaimsManager.playerOwnsClaimTheyreIn(player)) {
             player.sendMessage("You are not in your claim!");
             return;
         }

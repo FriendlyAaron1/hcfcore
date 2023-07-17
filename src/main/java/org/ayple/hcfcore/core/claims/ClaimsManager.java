@@ -200,13 +200,24 @@ public class ClaimsManager {
 
     }
 
-    private static boolean playerInWarzone(Player player) {
+    public static boolean playerInWarzone(Player player) {
         return player.getLocation().getX() <= 250 && player.getLocation().getX() >= -250 && player.getLocation().getZ() >= -250 && player.getLocation().getZ() <= 250;
     }
 
 
 
-    public static Faction playerInClaim(Player player) {
+    public static Claim getClaimPlayerIn(Player player) {
+
+        for (Claim claim : claims.values()) {
+            if (claim.getCuboid().contains(player.getLocation())) {
+                return claim;
+            }
+        }
+
+        return null;
+    }
+
+    public static Faction getFactionOwnerOfClaimPlayersIn(Player player) {
 
         for (Claim claim : claims.values()) {
             if (claim.getCuboid().contains(player.getLocation())) {
@@ -217,9 +228,10 @@ public class ClaimsManager {
         return null;
     }
 
-    public static boolean playerOwnsClaim(Player player) {
 
-        Faction faction = playerInClaim(player);
+    public static boolean playerOwnsClaimTheyreIn(Player player) {
+
+        Faction faction = getFactionOwnerOfClaimPlayersIn(player);
         if (faction == null) {
             return false;
         }
@@ -232,6 +244,9 @@ public class ClaimsManager {
 
         return faction.getFactionMembers().get(player.getUniqueId()) != null;
     }
+
+
+
 
     public static boolean blockInClaim(Location pos) {
         for (Cuboid claim : getAllClaimCuboids()) {

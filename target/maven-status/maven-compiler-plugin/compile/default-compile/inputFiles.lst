@@ -18,6 +18,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\ranks\OwnerR
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\EnderpearlCooldown.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\pvpclasses\ArcherClass.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionDeposit.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\AntiGriefEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerJoinedServerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\faction\FactionInvite.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandKit.java
@@ -69,7 +70,6 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\Playe
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\helpers\ConfigHelper.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionDisband.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerLeaveServerEvent.java
-C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerInteractedClaimEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\pvpclasses\PvpClass.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\CombatTimer.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionCreate.java

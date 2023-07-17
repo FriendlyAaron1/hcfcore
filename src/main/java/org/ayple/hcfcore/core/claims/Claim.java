@@ -1,6 +1,9 @@
 package org.ayple.hcfcore.core.claims;
 
 import org.ayple.hcfcore.core.Cuboid;
+import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
+import org.ayple.hcfcore.core.faction.Faction;
+import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,15 +11,20 @@ import org.bukkit.World;
 import java.util.UUID;
 
 public class Claim {
-
     private final UUID owner_faction_id;
     public UUID getOwnerFactionID() { return  this.owner_faction_id; }
 
     private final String faction_name;
     public String getFactionName() { return this.faction_name; }
 
+    private boolean is_server_claim = false;
+    public void setIsServerClaim(boolean value) {
+        this.is_server_claim = value;
+    }
 
-
+    public boolean isServerClaim() {
+        return this.is_server_claim;
+    }
 
     private final Location corner_1;
     private final Location corner_2;
@@ -62,5 +70,15 @@ public class Claim {
         this.faction_name = faction_name;
 
         this.bounding_box = new Cuboid(corner_1, corner_2);
+    }
+
+    public Faction getOwnerFaction() {
+        if (!is_server_claim)
+            return NewFactionManager.getFaction(getOwnerFactionID());
+        return null;
+    }
+
+    public boolean isClaimSpawn() {
+        return owner_faction_id.equals(SpawnClaim.SPAWN_UUID);
     }
 }

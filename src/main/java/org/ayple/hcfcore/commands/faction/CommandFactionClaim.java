@@ -5,6 +5,7 @@ import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.items.ClaimWand;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -27,6 +28,11 @@ public class CommandFactionClaim extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (NewFactionManager.playerInFaction(player.getUniqueId())) {
+            if (NewFactionManager.getFactionFromPlayerID(player.getUniqueId()).getClaim() != null) {
+                player.sendMessage(ChatColor.RED + "You already have a claim!");
+                return;
+            }
+
             if (NewFactionManager.isPlayerLeader(player.getUniqueId())) {
                 player.getInventory().addItem(ClaimWand.makeNewWand());
                 player.sendMessage("You have recieved a claim wand!");

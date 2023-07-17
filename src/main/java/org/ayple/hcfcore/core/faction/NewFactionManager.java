@@ -27,6 +27,10 @@ public class NewFactionManager {
         return new ArrayList<Faction>(factions.values());
     }
 
+//    public static void registerFaction(UUID id, Faction faction) {
+//        factions.put(id, faction);
+//    }
+
     public static void loadFactions() throws SQLException {
         factions.clear();
 
