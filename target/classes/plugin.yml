@@ -21,3 +21,7 @@ commands:
   kit:
     description: "get a kit"
     usage: "/kit [kit name]"
+
+  pvpenable:
+    description: "disables your pvp timer"
+    usage: "/pvpenable"

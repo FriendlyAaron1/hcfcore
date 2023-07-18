@@ -1,7 +1,9 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.BalanceHandler;
 import org.ayple.hcfcore.core.claims.*;
+import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.items.ClaimWand;
 import org.bukkit.Bukkit;
@@ -16,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.sql.SQLException;
 
 
-// TODO: fix pillars
+// TODO: Make sure no other claims are in cuboid region
 public class ClaimWandEvent implements Listener {
 
     @EventHandler
@@ -31,6 +33,7 @@ public class ClaimWandEvent implements Listener {
         if (!checkPlayerInFaction(player)) return;
         if (NewFactionManager.getFactionFromPlayerID(player.getUniqueId()).getClaim() != null) {
             player.sendMessage(ChatColor.RED + "You already have a claim!");
+            return;
         }
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -70,6 +73,13 @@ public class ClaimWandEvent implements Listener {
         }
 
         if (event.getAction() == Action.LEFT_CLICK_AIR && player.isSneaking()) {
+                Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+
+                if (faction == null) {
+                    player.sendMessage(ChatColor.RED + "You are not in a faction");
+                    return;
+                }
+
                 Location corner_1 = ClaimPillarManager.getFirstCornerAsLocation(player.getUniqueId());
                 Location corner_2 = ClaimPillarManager.getSecondCornerAsLocation(player.getUniqueId());
                 if (corner_1 == null) {
@@ -86,15 +96,29 @@ public class ClaimWandEvent implements Listener {
                 // make claim
                 Selection selection = new Selection(corner_1, corner_2);
                 if (!ClaimsManager.isClaimSizeLegal(selection.getCuboid())) {
-                    player.sendMessage("Claim must be larger than a 5x5!");
+                    player.sendMessage(ChatColor.RED + "Claim must be larger than a 5x5 and smaller than a 76x76!");
                     return;
                 }
+
+                if (ClaimsManager.otherClaimInCuboid(selection.getCuboid())) {
+                    player.sendMessage(ChatColor.RED + "Claim is already in the region!");
+                    return;
+                }
+
+
+
+                int price = ClaimsManager.getClaimSizePrice(selection.getCuboid());
+                if (faction.getFactionBal() > price) {
+                    player.sendMessage(ChatColor.RED + "Insufficient funds in faction balance. Claim cost: " + ChatColor.GOLD + Integer.toString(price));
+                    return;
+                }
+
 
 
                 // TODO: look into this as i feel it may cause errors - 16/07/23
                 Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
                     try {
-                        ClaimsManager.newClaim(player, selection);
+                        ClaimsManager.newClaim(player, selection, price);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -204,6 +228,10 @@ public class ClaimWandEvent implements Listener {
     }
 
     private static boolean checkBlockInClaimArea(Location location) {
-        return (location.getX() >= 750 && location.getX() <= -750) && (location.getZ() <= -750 && location.getZ() >= 750);
+//        System.out.println("X greater than or equal to 750: " + (location.getX() >= 750));
+//        System.out.println("X less than or equal to -750: " + (location.getX() <= -750));
+//        System.out.println("X greater than or equal to 750: " + (location.getZ() >= 750));
+//        System.out.println("X less than or equal to -750: " + (location.getZ() <= -750));
+        return (location.getX() >= 750 || location.getX() <= -750) || (location.getZ() <= -750 || location.getZ() >= 750);
     }
 }

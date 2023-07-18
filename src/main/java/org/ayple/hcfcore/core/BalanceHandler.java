@@ -120,4 +120,14 @@ public class BalanceHandler {
         return PlayerDataHandler.getPlayerData(player.getUniqueId()).getBalance();
     }
 
+    public static int getFactionBalance(Faction faction) {
+        return faction.getFactionBal();
+    }
+
+    public static int getFactionBalance(Player player) {
+        return NewFactionManager.getFactionFromPlayerID(player.getUniqueId()).getFactionBal();
+    }
+
+
+
 }

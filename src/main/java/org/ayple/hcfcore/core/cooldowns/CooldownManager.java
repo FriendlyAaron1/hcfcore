@@ -1,10 +1,11 @@
 package org.ayple.hcfcore.core.cooldowns;
 
+import org.ayple.hcfcore.core.faction.Faction;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -17,7 +18,42 @@ public class CooldownManager {
     private static Hashtable<UUID, BukkitRunnable> homeTimers = new Hashtable<UUID, BukkitRunnable>(); // f home
     private static Hashtable<UUID, BukkitRunnable> combatCooldowns = new Hashtable<UUID, BukkitRunnable>(); // combat timers
     private static Hashtable<UUID, BukkitRunnable> logoutTimer = new Hashtable<UUID, BukkitRunnable>(); // logout timers
+    private static Hashtable<UUID, PvpTimer> pvpTimers = new Hashtable<UUID, PvpTimer>();
+    private static Hashtable<UUID, DtrRegenTimer> dtrRegenTimers = new Hashtable<UUID, DtrRegenTimer>();
 
+    public static void registerDtrRegenTimer(Faction faction) {
+        dtrRegenTimers.put(faction.getFactionID(), new DtrRegenTimer(faction));
+    }
+
+    public static void onFinishedDtrRegen(Faction faction) {
+        dtrRegenTimers.remove(faction.getFactionID());
+        faction.setFactionDTR(faction.getMaxDTR());
+    }
+
+    public static boolean hasDtrRegen(Faction faction) {
+        return dtrRegenTimers.containsKey(faction.getFactionID());
+    }
+
+    public static int getDtrRegenSecondLeft(Faction faction) {
+        return dtrRegenTimers.get(faction.getFactionID()).getSecondsLeft();
+    }
+
+    public static void registerPvpTimer(Player player) {
+        pvpTimers.put(player.getUniqueId(), new PvpTimer(player));
+    }
+
+    public static void onFinishedPvpTimer(Player player) {
+        pvpTimers.remove(player.getUniqueId());
+    }
+
+    public static boolean playerHasPvpTimer(Player player) {
+        return pvpTimers.containsKey(player.getUniqueId());
+    }
+
+    public static void cancelPvpTimer(Player player) {
+        pvpTimers.get(player.getUniqueId()).cancel();
+        pvpTimers.get(player.getUniqueId()).getObjective().getScoreboard().resetScores(ChatColor.GREEN + "Pvp Timer: ");
+    }
 
     public static void registerEnderpearlCooldown(Player player_id) {
         enderpearlCooldowns.put(player_id.getUniqueId(), new EnderpearlCooldown(player_id));
@@ -33,6 +69,8 @@ public class CooldownManager {
         return cooldown.getSecondsLeft();
 
     }
+
+
 
     public static void onFinishedEnderpearlCooldown(Player player) {
         enderpearlCooldowns.remove(player.getUniqueId());

@@ -1,3 +1,4 @@
+org\ayple\hcfcore\events\DtrEventHandler.class
 org\ayple\hcfcore\events\OnEnderPearlEvent.class
 org\ayple\hcfcore\core\claims\map\MapPillarsHandler.class
 org\ayple\hcfcore\core\Cuboid$1.class
@@ -5,7 +6,6 @@ org\ayple\hcfcore\core\Cuboid.class
 org\ayple\hcfcore\commands\CommandStaff.class
 org\ayple\hcfcore\commands\faction\CommandFactionRename.class
 org\ayple\hcfcore\core\faction\FactionMemberRank.class
-org\ayple\hcfcore\events\PlayerMoveEvent.class
 org\ayple\hcfcore\pvpclasses\BardClass.class
 org\ayple\hcfcore\commands\CommandKit.class
 org\ayple\hcfcore\core\cooldowns\EnderpearlCooldown.class
@@ -15,6 +15,7 @@ org\ayple\hcfcore\events\PlayerUseChatEvent.class
 org\ayple\hcfcore\commands\faction\CommandFactionMap.class
 org\ayple\hcfcore\Hcfcore.class
 org\ayple\hcfcore\commands\faction\CommandFactionDisband.class
+org\ayple\hcfcore\core\cooldowns\PvpTimer.class
 org\ayple\hcfcore\ranks\RankHandler.class
 org\ayple\hcfcore\core\cooldowns\LogoutTimer.class
 org\ayple\hcfcore\commands\faction\CommandFactionLeader.class
@@ -43,6 +44,7 @@ org\ayple\hcfcore\events\PlayerHitEvent.class
 org\ayple\hcfcore\kits\KitManager.class
 org\ayple\hcfcore\events\PlayerArmorChangeEvent.class
 org\ayple\hcfcore\core\claims\serverclaim\GlowstoneMountainClaim.class
+org\ayple\hcfcore\commands\CommandPvpEnable.class
 org\ayple\hcfcore\commands\faction\CommandFactionDeposit.class
 org\ayple\hcfcore\ranks\AbstractRank.class
 org\ayple\hcfcore\kits\DiamondKit.class
@@ -58,7 +60,9 @@ org\ayple\hcfcore\core\claims\SelectionsManager.class
 org\ayple\hcfcore\events\PlayerJoinedServerEvent.class
 org\ayple\hcfcore\commands\staff\CommandVanish.class
 org\ayple\hcfcore\commands\faction\CommandFactionJoin.class
+org\ayple\hcfcore\events\PvpTimerEvent.class
 org\ayple\hcfcore\core\claims\ClaimsManager.class
+org\ayple\hcfcore\core\cooldowns\DtrRegenTimer.class
 org\ayple\hcfcore\core\faction\FactionInviteManager.class
 org\ayple\hcfcore\core\faction\FactionInvite.class
 org\ayple\hcfcore\ranks\OwnerRank.class
@@ -89,6 +93,7 @@ org\ayple\hcfcore\kits\BuilderKit.class
 org\ayple\hcfcore\playerdata\PlayerDataHandler.class
 org\ayple\hcfcore\core\claims\Selection.class
 org\ayple\hcfcore\commands\faction\CommandFactionKick.class
+org\ayple\hcfcore\events\OnPlayerMoveEvent.class
 org\ayple\hcfcore\commands\faction\CommandFactionSetHome.class
 org\ayple\hcfcore\kits\ArcherKit.class
 org\ayple\hcfcore\events\OnSleepEvent.class

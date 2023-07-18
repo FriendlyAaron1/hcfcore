@@ -1,5 +1,7 @@
 package org.ayple.hcfcore.events;
 
+import org.ayple.hcfcore.core.claims.ClaimsManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.core.scoreboard.ServerScoreboard;
@@ -24,16 +26,12 @@ public class PlayerJoinedServerEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        player.setScoreboard(ServerScoreboard.newScoreboard());
 
         if (!PlayerDataHandler.playerLoggedInBefore(player.getUniqueId())) {
             PlayerDataHandler.onLoginFirstTime(player.getUniqueId());
             giveStarterItems(player);
-        }
-
-        player.setScoreboard(ServerScoreboard.newScoreboard());
-        Faction faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
-        if (faction != null) {
-            player.setDisplayName(ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + player.getDisplayName());
+            CooldownManager.registerPvpTimer(player);
         }
 
     }

@@ -32,17 +32,19 @@ public class EndEventHandler implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerInteractInEnd(PlayerInteractEvent event) {
-        if (event.getPlayer().getWorld() != Bukkit.getWorld("end")) return;
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (event.getPlayer().hasPermission("hcf.core.interact_in_end")) {
-                return;
-            }
-
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.RED + "You cannot interact in end!");
-        }
-    }
+    // this isn't needed since the warzone thing stops it lmfao
+//    @EventHandler
+//    public void onPlayerInteractInEnd(PlayerInteractEvent event) {
+//        if (event.getPlayer().getWorld() != Bukkit.getWorld("end")) return;
+//
+//        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+//            if (event.getPlayer().hasPermission("hcf.core.interact_in_end")) {
+//                return;
+//            }
+//
+//            event.setCancelled(true);
+//            event.getPlayer().sendMessage(ChatColor.RED + "You cannot interact in end!");
+//        }
+//    }
 }

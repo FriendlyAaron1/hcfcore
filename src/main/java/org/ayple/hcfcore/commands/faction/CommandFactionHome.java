@@ -42,6 +42,11 @@ public class CommandFactionHome extends SubCommand {
             return;
         }
 
+        if (CooldownManager.playerHasPvpTimer(player)) {
+            player.sendMessage(ChatColor.RED + "You need to disable your pvp timer. Do /pvpenable");
+            return;
+        }
+
 
         if (!CooldownManager.hasHomeTimer(player.getUniqueId())) {
             CooldownManager.registerHomeTimer(player, hq);

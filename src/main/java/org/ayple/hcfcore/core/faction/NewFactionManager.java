@@ -3,6 +3,7 @@ package org.ayple.hcfcore.core.faction;
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -87,6 +88,15 @@ public class NewFactionManager {
 
         conn.closeConnection();
     }
+
+    public static void applyDTRregens() {
+        for (Faction faction : factions.values()) {
+            if (faction.getFactionDTR() != faction.getMaxDTR()) {
+                CooldownManager.registerDtrRegenTimer(faction);
+            }
+        }
+    }
+
 
 //    private static void getAllFactionMembers() {
 //
@@ -191,6 +201,19 @@ public class NewFactionManager {
     public static void disbandFaction(UUID faction_id) {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
+                String sql = "DELETE FROM faction_members WHERE faction_id=?";
+                HcfSqlConnection conn = new HcfSqlConnection();
+                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+                statement.setString(1, faction_id.toString());
+                System.out.println(statement.toString());
+                statement.executeUpdate();
+                conn.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+            }
+
+            try {
                 String sql = "DELETE FROM factions WHERE id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -198,6 +221,7 @@ public class NewFactionManager {
                 System.out.println(statement.toString());
                 statement.executeUpdate();
                 conn.closeConnection();
+
             } catch (SQLException e) {
                 e.printStackTrace();
 

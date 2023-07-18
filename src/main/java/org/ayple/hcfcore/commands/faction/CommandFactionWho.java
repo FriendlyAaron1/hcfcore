@@ -2,6 +2,7 @@ package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.Bukkit;
@@ -35,6 +36,7 @@ public class CommandFactionWho extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         Faction target_faction = null;
+        Faction second_target_faction = null;
 
         if (args.length == 1) {
             target_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
@@ -43,19 +45,40 @@ public class CommandFactionWho extends SubCommand {
                 return;
             }
 
+            displayFactionInfoToPlayer(target_faction, player);
 
         } else if (args.length > 1) {
             target_faction = NewFactionManager.getFaction(args[1]);
+            second_target_faction = NewFactionManager.getFactionFromPlayerID(Bukkit.getOfflinePlayer(player.getName()).getUniqueId());
 
-            if (target_faction == null) {
-                player.sendMessage("Faction name wasn't fount.");
+
+
+            if (target_faction == null && second_target_faction == null) {
+                player.sendMessage(ChatColor.RED + "Faction name wasn't fount.");
                 return;
             }
 
+            if (target_faction != null) {
+                displayFactionInfoToPlayer(target_faction, player);
+            }
+
+            if (second_target_faction != null) {
+                if (target_faction != null && target_faction.getFactionID() == second_target_faction.getFactionID()) return;
+                displayFactionInfoToPlayer(second_target_faction, player);
+            }
+
+
+
+
+
         } else {
             player.sendMessage(ChatColor.RED + getSyntax());
-            return;
         }
+
+
+    }
+
+    private void displayFactionInfoToPlayer(Faction target_faction, Player player) {
 
         String faction_name = target_faction.getFactionName();
         String members_size = Integer.toString(target_faction.getFactionMembersSize());
@@ -97,32 +120,36 @@ public class CommandFactionWho extends SubCommand {
         });
 
         player.sendMessage(ChatColor.YELLOW + "Leader: " + ChatColor.WHITE + leaders.toString()
-            .replace("[", "")
-            .replace("]", "")
+                .replace("[", "")
+                .replace("]", "")
         );
 
         if (!coleaders.isEmpty()) player.sendMessage(ChatColor.YELLOW + "Co-Leaders: " + ChatColor.WHITE + coleaders.toString()
-            .replace("[", "")
-            .replace("]", "")
+                .replace("[", "")
+                .replace("]", "")
         );
 
         if (!officers.isEmpty()) player.sendMessage(ChatColor.YELLOW + "Officers: " + ChatColor.WHITE + officers.toString()
-            .replace("[", "")
-            .replace("]", "")
+                .replace("[", "")
+                .replace("]", "")
         );
 
         if (!members.isEmpty()) player.sendMessage(ChatColor.YELLOW + "Members: " + ChatColor.WHITE + members.toString()
-            .replace("[", "")
-            .replace("]", "")
+                .replace("[", "")
+                .replace("]", "")
         );
 
         player.sendMessage(ChatColor.YELLOW + "Balance: " + ChatColor.BLUE + "$" + balance);
 
 
         if (target_faction.getFactionDTR() > 0) {
-            player.sendMessage(ChatColor.YELLOW + "dtr: " + ChatColor.GREEN + dtr);
+            player.sendMessage(ChatColor.YELLOW + "DTR: " + ChatColor.GREEN + dtr);
         } else {
-            player.sendMessage(ChatColor.YELLOW + "dtr: " + ChatColor.RED + dtr); // if raidable
+            player.sendMessage(ChatColor.YELLOW + "DTR: " + ChatColor.RED + dtr); // if raidable
+        }
+
+        if (CooldownManager.hasDtrRegen(target_faction)) {
+            player.sendMessage(ChatColor.YELLOW + "DTR Regen Time: " + ChatColor.RESET + CooldownManager.getDtrRegenSecondLeft(target_faction));
         }
 
         player.sendMessage("-----------------------------------------------------");

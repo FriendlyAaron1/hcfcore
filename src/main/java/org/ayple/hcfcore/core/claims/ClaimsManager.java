@@ -1,5 +1,6 @@
 package org.ayple.hcfcore.core.claims;
 
+import org.ayple.hcfcore.core.BalanceHandler;
 import org.ayple.hcfcore.core.Cuboid;
 import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
 import org.ayple.hcfcore.core.faction.Faction;
@@ -7,6 +8,7 @@ import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -19,7 +21,7 @@ public class ClaimsManager {
 
     // faction UUID
     // if faction UUID is
-    private static HashMap<UUID, Claim> claims = new HashMap<UUID, Claim>();
+    private static Hashtable<UUID, Claim> claims = new Hashtable<UUID, Claim>();
 
     // This is used to know what claims players go in and out of. This is done to
     // prevent spam of `playerInClaim`
@@ -28,7 +30,8 @@ public class ClaimsManager {
 
 
     public static void removeClaim(UUID faction_id) {
-        claims.remove(faction_id);
+        if (claims.containsKey(faction_id))
+            claims.remove(faction_id);
     }
 
     public static void registerClaim(Claim claim) {
@@ -41,6 +44,8 @@ public class ClaimsManager {
         claims.clear();
         for (Faction faction : NewFactionManager.getFactions()) {
             Claim fac_claim = faction.getClaim();
+            if (fac_claim == null) continue;
+
             claims.put(faction.getFactionID(), fac_claim);
         }
 
@@ -93,7 +98,7 @@ public class ClaimsManager {
 
     }
 
-    public static void newClaim(Player player, Selection selection) throws SQLException {
+    public static void newClaim(Player player, Selection selection, int price) throws SQLException {
         String sql = "UPDATE factions SET corner_1_x=?, corner_1_z=?, corner_2_x=?, corner_2_z=? WHERE id=?";
         HcfSqlConnection conn = new HcfSqlConnection();
         PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -122,6 +127,7 @@ public class ClaimsManager {
 
 
         conn.closeConnection();
+        BalanceHandler.takeMoneyFromFaction(faction_id, price);
         claims.put(faction_id, new Claim(faction_id, faction.getFactionName(), selection.getPos1(), selection.getPos2()));
     }
 
@@ -141,10 +147,10 @@ public class ClaimsManager {
 
 
         // loops through every claim and checks if teh players in it and then
-        // stores the value, if no claimis fount then it's set to eitehr wilderness
+        // stores the value, if no claim is fount then it's set to either wilderness
         // or warzone
         for (Claim claim : claims.values()) {
-            if (claim.getCuboid() == null) return;
+            if (claim.getCuboid() == null) continue;
             if (claim.getCuboid().contains(player.getLocation())) {
                 UUID claim_id = claim.getOwnerFactionID();
 
@@ -256,14 +262,36 @@ public class ClaimsManager {
         return false;
     }
 
+    public static Cuboid cuboid3Dto2D(Cuboid cuboid) {
+        Location corner_1 = new Location(cuboid.getWorld(), cuboid.getLowerNE().getX(), 0, cuboid.getLowerNE().getZ());
+        Location corner_2 = new Location(cuboid.getWorld(), cuboid.getUpperSW().getX(), 0, cuboid.getUpperSW().getZ());
+        return new Cuboid(corner_1, corner_2);
+    }
+
+
+    // TODO: potentially find a better solution, should work
+    // for a small server. Could cause problems as server
+    // gets larger!
+    public static boolean otherClaimInCuboid(Cuboid cuboid) {
+        Cuboid flat_surface = cuboid3Dto2D(cuboid);
+        for (Cuboid claim : getAllClaimCuboids()) {
+            for (Block block : flat_surface.getBlocks()) {
+                if (claim.contains(block.getLocation())) return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public static boolean isClaimSizeLegal(Cuboid claim) {
-        // essentially, turn it top down and get the area of that
-        Location corner_1 = new Location(claim.getWorld(), claim.getLowerNE().getX(), 0, claim.getLowerNE().getZ());
-        Location corner_2 = new Location(claim.getWorld(), claim.getUpperSW().getX(), 0, claim.getUpperSW().getZ());
-        Cuboid flat_surface = new Cuboid(corner_1, corner_2);
-        return flat_surface.getVolume() >= 25;
+        Cuboid flat_surface = cuboid3Dto2D(claim);
+        return flat_surface.getVolume() >= 25 && flat_surface.getVolume() <= 3600;
+    }
 
+    public static int getClaimSizePrice(Cuboid claim) {
+        Cuboid flat_surface = cuboid3Dto2D(claim);
+        return flat_surface.getVolume() * 10;
     }
 
 

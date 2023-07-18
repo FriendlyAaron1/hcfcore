@@ -42,6 +42,18 @@ public final class Hcfcore extends JavaPlugin {
         ConfigHelper.getConfig().addDefault("DB_USER", "root");
         ConfigHelper.getConfig().addDefault("DB_PASS", "password");
         ConfigHelper.getConfig().addDefault("DB_NAME", "hcf");
+        ConfigHelper.getConfig().addDefault("server_name", "cheeky hcf");
+        ConfigHelper.getConfig().addDefault("map_number", 1);
+        ConfigHelper.getConfig().addDefault("kitmap_mode", false);
+        ConfigHelper.getConfig().addDefault("enchant_limits.sharpness", 2);
+        ConfigHelper.getConfig().addDefault("enchant_limits.protection", 2);
+        ConfigHelper.getConfig().addDefault("end_portal_exit.x", 1);
+        ConfigHelper.getConfig().addDefault("end_portal_exit.y", 80);
+        ConfigHelper.getConfig().addDefault("end_portal_exit.z", 200);
+        ConfigHelper.getConfig().addDefault("server_claims.spawn.spawn_corner_1_x", -50);
+        ConfigHelper.getConfig().addDefault("server_claims.spawn.spawn_corner_1_z", 50);
+        ConfigHelper.getConfig().addDefault("server_claims.spawn.spawn_corner_2_x", 50);
+//        ConfigHelper.getConfig().addDefault("server_claims.glowstone_mountain.glowstone_respawn_area", -50);
 
 
         ConfigHelper.getConfig().options().copyDefaults(true);
@@ -59,6 +71,7 @@ public final class Hcfcore extends JavaPlugin {
             NewFactionManager.loadFactions();
             PlayerDataHandler.loadAllPlayerData();
             ClaimsManager.reloadClaims();
+            NewFactionManager.applyDTRregens();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,6 +89,7 @@ public final class Hcfcore extends JavaPlugin {
         getCommand("faction").setExecutor(new CommandFaction());
         getCommand("logout").setExecutor(new CommandLogout());
         getCommand("balance").setExecutor(new CommandBalance());
+        getCommand("pvpenable").setExecutor(new CommandPvpEnable());
         getCommand("kit").setExecutor(new CommandKit());
         //getCommand("serverclaim").setExecutor(new CommandServerClaim());
 
@@ -83,10 +97,12 @@ public final class Hcfcore extends JavaPlugin {
 
     public void registerEvents() {
         PluginManager manager =  getServer().getPluginManager();
+        manager.registerEvents(new AntiGriefEvent(), this);
         manager.registerEvents(new BardEffectsEvent(), this);
         manager.registerEvents(new ClaimWandEvent(), this);
         manager.registerEvents(new CombatLoggerEvent(), this);
-        manager.registerEvents(new EnchantLimiterEvent(), this);
+        manager.registerEvents(new DtrEventHandler(), this);
+        //manager.registerEvents(new EnchantLimiterEvent(), this);
         manager.registerEvents(new EndEventHandler(), this);
         manager.registerEvents(new KitEquipSignEvent(), this);
         manager.registerEvents(new OnClickKitGUIEvent(), this);
@@ -95,13 +111,13 @@ public final class Hcfcore extends JavaPlugin {
         manager.registerEvents(new PlayerArmorChangeEvent(), this);
         manager.registerEvents(new PlayerDeathBanEvent(), this);
         manager.registerEvents(new PlayerHitEvent(), this);
-        manager.registerEvents(new AntiGriefEvent(), this);
         manager.registerEvents(new PlayerInteractEntity(), this);
         manager.registerEvents(new PlayerJoinedServerEvent(), this);
         manager.registerEvents(new PlayerLeaveServerEvent(), this);
-        manager.registerEvents(new PlayerMoveEvent(), this);
+        manager.registerEvents(new OnPlayerMoveEvent(), this);
         manager.registerEvents(new PlayerUseChatEvent(), this);
         manager.registerEvents(new PotionRefillSignEvent(), this);
+        manager.registerEvents(new PvpTimerEvent(), this);
     }
 
     @Override

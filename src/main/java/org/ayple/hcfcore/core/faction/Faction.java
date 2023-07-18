@@ -52,6 +52,14 @@ public class Faction {
     private float dtr;
     public float getFactionDTR() { return this.dtr; }
     public void setFactionDTR(float new_dtr) { this.dtr = new_dtr; }
+    public float getMaxDTR() {
+        switch (getFactionMembersSize()) {
+            case 2: return 2.01f;
+            case 3: return 3.01f;
+            case 4: return 4.01f;
+            default: return 1.01f;
+        }
+    }
 
     private int bal;
     public Integer getFactionBal() { return this.bal; }
@@ -83,6 +91,7 @@ public class Faction {
 
         factionMembers.put(player_id, rank);
     }
+
 
     public void setFactionMembersFromDatabase() {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
@@ -149,6 +158,8 @@ public class Faction {
 
         return size;
     }
+
+
 
 //    public int getOnlineSize() {
 //        return getOnlinePlayers().size();

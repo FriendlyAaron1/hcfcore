@@ -19,12 +19,13 @@ public class PlayerUseChatEvent implements Listener {
 
         Faction faction = NewFactionManager.getFactionFromPlayerID(p.getUniqueId());
         if (faction == null) {
-            Bukkit.broadcastMessage(p.getDisplayName() + " " + msg);
+            Bukkit.broadcastMessage(ChatColor.YELLOW + p.getDisplayName() + ": " + ChatColor.RESET + msg);
+            event.setCancelled(true);
             return;
         }
 
 
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + p.getDisplayName() + " " + msg);
+        Bukkit.broadcastMessage(ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + p.getDisplayName() + ": " + msg);
         event.setCancelled(true);
     }
 
