@@ -34,6 +34,12 @@ public class PlayerJoinedServerEvent implements Listener {
             CooldownManager.registerPvpTimer(player);
         }
 
+        if (CooldownManager.playerHasPvpTimer(player)) {
+            player.sendMessage(ChatColor.GREEN + "Detected pvp timer, adding it to scoreboard!");
+            CooldownManager.showPvpTimer(player);
+        }
+
+
     }
 
     private void giveStarterItems(Player player) {

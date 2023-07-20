@@ -19,6 +19,10 @@ public class OnClickKitGUIEvent implements Listener {
 
     @EventHandler
     public void clickEvent(InventoryClickEvent e) {
+        if (e.getClickedInventory() == null) {
+            return;
+        }
+
         if (e.getClickedInventory().getTitle().equalsIgnoreCase(ChatColor.AQUA + "Kits Menu")) {
             Player player = (Player) e.getWhoClicked();
 

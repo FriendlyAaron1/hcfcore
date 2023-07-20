@@ -3,8 +3,8 @@ package org.ayple.hcfcore.events;
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
-import org.ayple.hcfcore.pvpclasses.BardClass;
-import org.ayple.hcfcore.pvpclasses.PvpClass;
+import org.ayple.hcfcore.kits.pvpclasses.BardClass;
+import org.ayple.hcfcore.kits.pvpclasses.PvpClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class BardEffectsEvent implements Listener {

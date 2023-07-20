@@ -98,15 +98,19 @@ public final class Hcfcore extends JavaPlugin {
     public void registerEvents() {
         PluginManager manager =  getServer().getPluginManager();
         manager.registerEvents(new AntiGriefEvent(), this);
+        manager.registerEvents(new BannedItemListenerEvent(), this);
         manager.registerEvents(new BardEffectsEvent(), this);
         manager.registerEvents(new ClaimWandEvent(), this);
         manager.registerEvents(new CombatLoggerEvent(), this);
         manager.registerEvents(new DtrEventHandler(), this);
-        //manager.registerEvents(new EnchantLimiterEvent(), this);
+        manager.registerEvents(new EnchantLimiterEvent(), this);
         manager.registerEvents(new EndEventHandler(), this);
+        manager.registerEvents(new GoldenAppleListenerEvent(), this);
+        manager.registerEvents(new KeyOpenEvent(), this);
         manager.registerEvents(new KitEquipSignEvent(), this);
         manager.registerEvents(new OnClickKitGUIEvent(), this);
         manager.registerEvents(new OnEnderPearlEvent(), this);
+        manager.registerEvents(new OnPlayerMoveEvent(), this);
         manager.registerEvents(new OnSleepEvent(), this);
         manager.registerEvents(new PlayerArmorChangeEvent(), this);
         manager.registerEvents(new PlayerDeathBanEvent(), this);
@@ -114,10 +118,12 @@ public final class Hcfcore extends JavaPlugin {
         manager.registerEvents(new PlayerInteractEntity(), this);
         manager.registerEvents(new PlayerJoinedServerEvent(), this);
         manager.registerEvents(new PlayerLeaveServerEvent(), this);
-        manager.registerEvents(new OnPlayerMoveEvent(), this);
         manager.registerEvents(new PlayerUseChatEvent(), this);
         manager.registerEvents(new PotionRefillSignEvent(), this);
         manager.registerEvents(new PvpTimerEvent(), this);
+        manager.registerEvents(new ShopSignEvent(), this);
+        manager.registerEvents(new SpawnListenerEvent(), this);
+        manager.registerEvents(new TntDisablerEvent(), this);
     }
 
     @Override

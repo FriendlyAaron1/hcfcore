@@ -2,9 +2,8 @@ package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
+import org.ayple.hcfcore.core.faction.Faction;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,13 +38,17 @@ public class AntiGriefEvent implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
+        if (player.isOp() && player.getGameMode() == GameMode.CREATIVE) return;
+
         World player_world = player.getWorld();
-        boolean player_in_nether = player_world.getEnvironment().equals(World.Environment.NETHER);
+//        boolean player_in_nether = player_world.getEnvironment().equals(World.Environment.NETHER);
         boolean player_in_end = player_world.getEnvironment().equals(World.Environment.THE_END);
 //        System.out.println("player in nether: " + player_in_nether);
 //        System.out.println("player in end: " + player_in_end);
-        if (player_in_nether) return;
-        if (player_in_end && player.hasPermission("hcf.core.edit_in_end")) return;
+//        if (player_in_nether) return;
+//        if (player_in_end && player.hasPermission("hcf.core.edit_in_end")) return;
+
+
 
 
 
@@ -55,9 +58,29 @@ public class AntiGriefEvent implements Listener {
 
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (player.getInventory().getItemInHand() != null) {
+                if (player.getInventory().getItemInHand().getType() == Material.ENDER_PEARL) {
+                    return;
+                }
+
+                if (player.getInventory().getItemInHand().getType() == Material.POTION) {
+                    return;
+                }
+
+                if (player.getInventory().getItemInHand().getType().isEdible()) {
+                    return;
+                }
+            }
+
+
+
+
             if (event.getClickedBlock() != null) {
+
                 // players in wilderness
                 if (claim == null)  {
+
+
                     if (ClaimsManager.playerInWarzone(player)) {
                         player.sendMessage(ChatColor.RED + "You cannot interact in Warzone!");
                         event.setCancelled(true);
@@ -67,17 +90,22 @@ public class AntiGriefEvent implements Listener {
                 }
 
 
-                if (claim.isClaimSpawn() && !player.hasPermission("hcf.core.edit_spawn")) {
+                if (claim.isClaimSpawn()) {
                     player.sendMessage(ChatColor.RED + "You cannot interact in Spawn!");
                     event.setCancelled(true);
                     return;
                 }
 
-                if (ClaimsManager.playerInWarzone(player) && !player.hasPermission("hcf.core.edit_warzone")) {
-                    player.sendMessage(ChatColor.RED + "You cannot build or break in warzone!");
-                    event.setCancelled(true);
-                    return;
-                }
+                // commented this out since it turns out i already did this
+//                if (ClaimsManager.playerInWarzone(player)) {
+//                    if (player.hasPermission("hcf.core.edit_warzone")) {
+//                        return;
+//                    }
+//
+//                    player.sendMessage(ChatColor.RED + "You cannot build or break in warzone!");
+//                    event.setCancelled(true);
+//                    return;
+//                }
 
                 // if player in claim
                 // if (claim_owner.getClaim().getOwnerFactionID())

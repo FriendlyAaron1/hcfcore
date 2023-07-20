@@ -1,15 +1,12 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.pvpclasses.BardClass;
-import org.ayple.hcfcore.pvpclasses.PvpClass;
+import org.ayple.hcfcore.kits.pvpclasses.PvpClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 //import org.bukkit.potion.PotionData;
@@ -19,13 +16,11 @@ import org.bukkit.potion.PotionEffectType;
 public class PlayerArmorChangeEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerClickInventory(InventoryClickEvent event) {
-        if (!event.isLeftClick()) return;
-
         Player player = (Player) event.getWhoClicked();
 
         if (player != null) {
             if (!PvpClass.wearingAllArmor(player.getInventory())) {
-                removeAllEffects(player);
+                removeAllSpecialEffects(player);
                 return;
             }
 
@@ -65,7 +60,7 @@ public class PlayerArmorChangeEvent implements Listener {
                 return;
             }
 
-            removeAllEffects(player);
+            removeAllSpecialEffects(player);
 
         }
 
@@ -75,7 +70,7 @@ public class PlayerArmorChangeEvent implements Listener {
     // move to a utils class
 
 
-    private void removeAllEffects(Player player) {
+    private void removeAllSpecialEffects(Player player) {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             if (effect.getDuration() > 10000) {
                 player.removePotionEffect(effect.getType());

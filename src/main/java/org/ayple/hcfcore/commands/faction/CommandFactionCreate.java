@@ -26,12 +26,17 @@ public class CommandFactionCreate extends SubCommand {
     public void perform(Player player, String[] args) {
         if (args.length > 1) {
             if (args[1].length() >= 15) {
-                player.sendMessage("Name is too long. Maximum 15 characters!");
+                player.sendMessage(ChatColor.RED + "Name is too long. Maximum 15 characters!");
                 return;
             }
 
             if (args[1].length() < 3) {
-                player.sendMessage("Name is too short. Minimum 3 characters!");
+                player.sendMessage(ChatColor.RED + "Name is too short. Minimum 3 characters!");
+                return;
+            }
+
+            if(!validFactionName(args[1])) {
+                player.sendMessage(ChatColor.RED + "Invalid name. Only letters are allowed, no spaced or numbers!");
                 return;
             }
 
@@ -50,5 +55,18 @@ public class CommandFactionCreate extends SubCommand {
         }
 
         player.sendMessage(ChatColor.RED + getSyntax());
+    }
+
+    // cba learning how to do regex on java so we are using this
+    private boolean validFactionName(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if (!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

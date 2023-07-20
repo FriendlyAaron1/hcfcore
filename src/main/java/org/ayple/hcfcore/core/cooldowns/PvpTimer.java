@@ -8,7 +8,7 @@ import org.bukkit.scoreboard.Objective;
 
 public class PvpTimer extends BukkitRunnable {
     private Player owner;
-    private Objective objective;
+    public final Objective objective;
     public Objective getObjective() { return this.objective; }
 
     private int seconds_left;
@@ -30,7 +30,7 @@ public class PvpTimer extends BukkitRunnable {
             this.objective.getScoreboard().resetScores(ChatColor.GREEN + "Pvp Timer: ");
             cancel();
         } else {
-            objective.getScore(ChatColor.GREEN + "Pvp Timer: ").setScore(seconds_left);
+            this.objective.getScore(ChatColor.GREEN + "Pvp Timer: ").setScore(seconds_left);
             seconds_left--;
         }
     }

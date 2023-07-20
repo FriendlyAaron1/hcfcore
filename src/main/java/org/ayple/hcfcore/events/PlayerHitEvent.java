@@ -20,11 +20,18 @@ public class PlayerHitEvent implements Listener {
             Player whoWasHit = (Player) event.getEntity();
             Player whoHit = (Player) event.getDamager();
 
+            if (CooldownManager.playerHasPvpTimer(whoHit)) {
+                whoHit.sendMessage(ChatColor.RED + "Cannot hit as you have pvp timer!");
+                event.setCancelled(true);
+                return;
+            }
+
             if (CooldownManager.playerHasPvpTimer(whoWasHit)) {
                 whoHit.sendMessage(ChatColor.RED + "Cannot hit them as they have pvp timer!");
                 event.setCancelled(true);
                 return;
             }
+
 
             Claim player_in_claim = ClaimsManager.getClaimPlayerIn(whoWasHit.getPlayer());
             if (player_in_claim != null) {

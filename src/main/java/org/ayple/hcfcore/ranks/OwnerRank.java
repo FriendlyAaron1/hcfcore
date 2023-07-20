@@ -14,7 +14,7 @@ public class OwnerRank extends AbstractRank {
     @Override
     public ChatColor getPrefixColor() {
         return ChatColor.RED;
-    }
+}
 
     @Override
     public String getRankPrefix() {

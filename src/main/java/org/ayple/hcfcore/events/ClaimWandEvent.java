@@ -30,7 +30,10 @@ public class ClaimWandEvent implements Listener {
         // are they in a faction? if not then return
         if (player.getWorld() != Bukkit.getWorld("world") && !player.hasPermission("hcfcore.admin")) return;
         if (!ClaimWand.isItemClaimWand(player.getInventory().getItemInHand())) return;
-        if (!checkPlayerInFaction(player)) return;
+        if (!checkPlayerInFaction(player)) {
+            player.sendMessage(ChatColor.RED + "You are not in a faction!");
+            return;
+        }
         if (NewFactionManager.getFactionFromPlayerID(player.getUniqueId()).getClaim() != null) {
             player.sendMessage(ChatColor.RED + "You already have a claim!");
             return;
@@ -80,6 +83,12 @@ public class ClaimWandEvent implements Listener {
                     return;
                 }
 
+                if (faction.getClaim() != null) {
+                    player.sendMessage(ChatColor.RED + "Your faction already has a claim!");
+                    return;
+                }
+
+
                 Location corner_1 = ClaimPillarManager.getFirstCornerAsLocation(player.getUniqueId());
                 Location corner_2 = ClaimPillarManager.getSecondCornerAsLocation(player.getUniqueId());
                 if (corner_1 == null) {
@@ -108,7 +117,8 @@ public class ClaimWandEvent implements Listener {
 
 
                 int price = ClaimsManager.getClaimSizePrice(selection.getCuboid());
-                if (faction.getFactionBal() > price) {
+                System.out.println("Price :" + price);
+                if (faction.getFactionBal() < price) {
                     player.sendMessage(ChatColor.RED + "Insufficient funds in faction balance. Claim cost: " + ChatColor.GOLD + Integer.toString(price));
                     return;
                 }

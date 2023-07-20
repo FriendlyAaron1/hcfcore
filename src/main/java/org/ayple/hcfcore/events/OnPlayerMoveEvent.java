@@ -5,13 +5,14 @@ import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class OnPlayerMoveEvent implements Listener {
 //    public Hashtable<UUID, Location> player_last_location = new Hashtable<UUID, Location>();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event == null || event.getPlayer() == null) return;
         Player p = event.getPlayer();

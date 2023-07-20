@@ -20,6 +20,19 @@ public class CooldownManager {
     private static Hashtable<UUID, BukkitRunnable> logoutTimer = new Hashtable<UUID, BukkitRunnable>(); // logout timers
     private static Hashtable<UUID, PvpTimer> pvpTimers = new Hashtable<UUID, PvpTimer>();
     private static Hashtable<UUID, DtrRegenTimer> dtrRegenTimers = new Hashtable<UUID, DtrRegenTimer>();
+    private static Hashtable<UUID, CrappleCooldown> crappleCooldowns = new Hashtable<UUID, CrappleCooldown>();
+
+    public static void registerCrappleCooldown(Player owner) {
+        crappleCooldowns.put(owner.getUniqueId(), new CrappleCooldown(owner));
+    }
+
+    public static void onFinishedCrappleCooldown(Player owner) {
+        crappleCooldowns.remove(owner.getUniqueId());
+    }
+
+    public static boolean hasCrappleCooldown(Player owner) {
+        return crappleCooldowns.containsKey(owner.getUniqueId());
+    }
 
     public static void registerDtrRegenTimer(Faction faction) {
         dtrRegenTimers.put(faction.getFactionID(), new DtrRegenTimer(faction));
@@ -50,9 +63,16 @@ public class CooldownManager {
         return pvpTimers.containsKey(player.getUniqueId());
     }
 
+    public static void showPvpTimer(Player player) {
+        PvpTimer timer = pvpTimers.get(player.getUniqueId());
+        timer.objective.getScore(ChatColor.GREEN + "Pvp Timer: ").setScore(timer.getSecondsLeft());
+
+    }
+
     public static void cancelPvpTimer(Player player) {
         pvpTimers.get(player.getUniqueId()).cancel();
         pvpTimers.get(player.getUniqueId()).getObjective().getScoreboard().resetScores(ChatColor.GREEN + "Pvp Timer: ");
+        pvpTimers.remove(player.getUniqueId());
     }
 
     public static void registerEnderpearlCooldown(Player player_id) {
@@ -98,6 +118,9 @@ public class CooldownManager {
     }
 
     public static void registerCombatTimer(Player player) {
+        if (combatCooldowns.containsKey(player.getUniqueId()))
+            combatCooldowns.get(player.getUniqueId()).cancel();
+
         combatCooldowns.put(player.getUniqueId(), new CombatTimer(player));
     }
 
