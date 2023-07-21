@@ -51,19 +51,36 @@ public class Faction {
 
     private float dtr;
     public float getFactionDTR() { return this.dtr; }
-    public void setFactionDTR(float new_dtr) { this.dtr = new_dtr; }
+    public void setFactionDTR(float new_dtr) {
+        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+            try {
+                String sql = "UPDATE factions SET dtr = ?";
+                HcfSqlConnection conn = new HcfSqlConnection();
+                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+                statement.setFloat(1, new_dtr);
+                statement.executeUpdate();
+                conn.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.dtr = new_dtr;
+    }
+
     public float getMaxDTR() {
         switch (getFactionMembersSize()) {
             case 2: return 2.01f;
-            case 3: return 3.01f;
-            case 4: return 4.01f;
+            case 3:
+            case 4:
+                return 3.01f;
             default: return 1.01f;
         }
     }
 
-    private int bal;
-    public Integer getFactionBal() { return this.bal; }
-    public void setFactionBal(int new_bal) { this.bal = new_bal; }
+    private double bal;
+    public Double getFactionBal() { return this.bal; }
+    public void setFactionBal(double new_bal) { this.bal = new_bal; }
 
     private final Hashtable<UUID, Integer> factionMembers = new Hashtable<UUID, Integer>();
     public Hashtable<UUID, Integer> getFactionMembers() { return this.factionMembers; }
@@ -157,6 +174,15 @@ public class Faction {
         }
 
         return size;
+    }
+
+    public void broadcastMessageToFaction(String message) {
+        for (UUID target_id : this.getFactionMembers().keySet()) {
+            OfflinePlayer target_player = Bukkit.getOfflinePlayer(target_id);
+            if (target_player.isOnline()) {
+                target_player.getPlayer().sendMessage(message);
+            }
+        }
     }
 
 

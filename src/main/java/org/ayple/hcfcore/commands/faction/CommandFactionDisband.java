@@ -42,6 +42,7 @@ public class CommandFactionDisband extends SubCommand {
         }
 
         NewFactionManager.disbandFaction(faction.getFactionID());
+        player.sendMessage(ChatColor.GREEN + "Your faction has been disbanded!");
 
     }
 }

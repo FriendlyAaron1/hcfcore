@@ -28,6 +28,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\fac
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PvpTimerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\ShopSignEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\ClaimWandEvent.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\BuyLifeSignEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PotionRefillSignEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionInvite.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\kits\BardKit.java
@@ -37,6 +38,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\faction
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandServerClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\ClaimPillar.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionJoin.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\TntDisablerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandPvpEnable.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionPromote.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\ranks\AbstractRank.java
@@ -47,15 +49,18 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\shopsigns\Sh
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionCreate.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\serverclaim\SpawnClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandBalance.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\KillKeyHandlerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionWho.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\CombatLoggerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\LogoutTimer.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerDeathBanEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\map\ClaimMap.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionHome.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\crates\KillCrate.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\EndEventHandler.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\Hcfcore.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\map\MapPillarsHandler.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\CommandLives.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\cooldowns\PvpTimer.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\scoreboard\ServerScoreboard.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\Cuboid.java
@@ -73,7 +78,9 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\faction\LegacyFactionManager.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\staff\CommandStaff.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionWithdraw.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\helpers\DateTimeUtils.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\commands\faction\CommandFactionKick.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\crates\KillKey.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\kits\KitmapKit.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\PlayerInteractEntity.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\faction\Faction.java
@@ -81,6 +88,7 @@ C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\OnEnd
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\SpawnListenerEvent.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\claims\ServerClaim.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\OnSleepEvent.java
+C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\crates\AbstractCrate.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\core\BalanceHandler.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\playerdata\PlayerDataHandler.java
 C:\Users\RawrI\IdeaProjects\hcfcore\src\main\java\org\ayple\hcfcore\events\GoldenAppleListenerEvent.java

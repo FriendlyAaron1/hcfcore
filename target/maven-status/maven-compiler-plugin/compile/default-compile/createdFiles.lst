@@ -7,6 +7,7 @@ org\ayple\hcfcore\core\Cuboid.class
 org\ayple\hcfcore\commands\CommandStaff.class
 org\ayple\hcfcore\commands\faction\CommandFactionRename.class
 org\ayple\hcfcore\events\BannedItemListenerEvent.class
+org\ayple\hcfcore\commands\CommandLives.class
 org\ayple\hcfcore\core\faction\FactionMemberRank.class
 org\ayple\hcfcore\crates\AbstractCrate.class
 org\ayple\hcfcore\commands\CommandKit.class
@@ -34,7 +35,9 @@ org\ayple\hcfcore\events\EndEventHandler.class
 org\ayple\hcfcore\commands\faction\CommandFactionFocus.class
 org\ayple\hcfcore\commands\faction\CommandFactionInvite.class
 org\ayple\hcfcore\events\ClaimWandEvent.class
+org\ayple\hcfcore\helpers\DateTimeUtils.class
 org\ayple\hcfcore\helpers\HcfSqlConnection.class
+org\ayple\hcfcore\events\KillKeyHandlerEvent.class
 org\ayple\hcfcore\helpers\PlayerHelpers.class
 org\ayple\hcfcore\core\claims\ClaimPillar.class
 org\ayple\hcfcore\commands\faction\CommandFactionWho.class
@@ -49,6 +52,7 @@ org\ayple\hcfcore\events\AntiGriefEvent.class
 org\ayple\hcfcore\events\PlayerHitEvent.class
 org\ayple\hcfcore\kits\KitManager.class
 org\ayple\hcfcore\events\PlayerArmorChangeEvent.class
+org\ayple\hcfcore\events\BuyLifeSignEvent.class
 org\ayple\hcfcore\core\claims\serverclaim\GlowstoneMountainClaim.class
 org\ayple\hcfcore\commands\CommandPvpEnable.class
 org\ayple\hcfcore\commands\faction\CommandFactionDeposit.class
@@ -105,7 +109,6 @@ org\ayple\hcfcore\core\claims\Selection.class
 org\ayple\hcfcore\commands\faction\CommandFactionKick.class
 org\ayple\hcfcore\events\OnPlayerMoveEvent.class
 org\ayple\hcfcore\commands\faction\CommandFactionSetHome.class
-org\ayple\hcfcore\events\KeyOpenEvent.class
 org\ayple\hcfcore\kits\ArcherKit.class
 org\ayple\hcfcore\events\OnSleepEvent.class
 org\ayple\hcfcore\core\Cuboid$CuboidIterator.class

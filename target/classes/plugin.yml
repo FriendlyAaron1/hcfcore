@@ -11,16 +11,21 @@ commands:
 
   logout:
     description: "logout safely"
-    usage: "/logout"
+    usage: "COMING NEXT MAP"
 
   balance:
     description: "get your balance"
     usage: "/bal"
     aliases: [bal]
 
-  kit:
-    description: "get a kit"
-    usage: "/kit [kit name]"
+  lives:
+    description: "display your lives"
+    usage: "/lives"
+
+
+#  kit:
+#    description: "get a kit"
+#    usage: "/kit [kit name]"
 
   pvpenable:
     description: "disables your pvp timer"

@@ -24,7 +24,6 @@ public class BardEffectsEvent implements Listener {
 
         // TODO: for the love of god, optimize this eventually,
         // TODO: test this!!
-        // classic running sql query every millisecond
 
 
         // this is done here to avoid errors
@@ -50,7 +49,7 @@ public class BardEffectsEvent implements Listener {
         }
 
 
-        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+//        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
                 for (Entity ps : p.getNearbyEntities(10, 20, 10)) {
                     if (ps instanceof Player) {
                         Player target_player = (Player) ps;
@@ -63,6 +62,6 @@ public class BardEffectsEvent implements Listener {
                     }
 
                 }
-            });
-        }
+//            });
+    }
 }

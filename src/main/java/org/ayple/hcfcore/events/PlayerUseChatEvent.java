@@ -15,26 +15,26 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerUseChatEvent implements Listener {
-    private String OWNER_UUID = "e1de07bd-272b-4e63-adf7-66f8267468ae";
-    private String CRAZY_UUID = "e1de07bd-272b-4e63-adf7-66f8267468ae";
-    private String ALFIE_UUID = "e0c7b962-88f3-455f-b2e8-71b278eb2833";
-    private String GALAXY_UUID = "";
+//    private String OWNER_UUID = "e1de07bd-272b-4e63-adf7-66f8267468ae";
+//    private String CRAZY_UUID = "e1de07bd-272b-4e63-adf7-66f8267468ae";
+//    private String ALFIE_UUID = "e0c7b962-88f3-455f-b2e8-71b278eb2833";
+//    private String GALAXY_UUID = "";
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         final Player p = event.getPlayer();
         final String msg = event.getMessage();
         String rank = "";
-
-        if (Objects.equals(p.getUniqueId().toString(), OWNER_UUID)) {
-            rank = ChatColor.RED + "[Owner] ";
-        } else if (Objects.equals(p.getUniqueId().toString(), GALAXY_UUID)) {
-            rank = ChatColor.GOLD + "[Youtuber] ";
-        } else if (Objects.equals(p.getUniqueId().toString(), CRAZY_UUID)) {
-            rank = ChatColor.DARK_BLUE + "[Sgt.Mjr] ";
-        } else if (Objects.equals(p.getUniqueId().toString(), ALFIE_UUID)) {
-            rank = ChatColor.LIGHT_PURPLE + "[Builder] ";
-        }
+//
+//        if (Objects.equals(p.getUniqueId().toString(), OWNER_UUID)) {
+//            rank = ChatColor.RED + "[Owner] ";
+//        } else if (Objects.equals(p.getUniqueId().toString(), GALAXY_UUID)) {
+//            rank = ChatColor.GOLD + "[Youtuber] ";
+//        } else if (Objects.equals(p.getUniqueId().toString(), CRAZY_UUID)) {
+//            rank = ChatColor.DARK_BLUE + "[Sgt.Mjr] ";
+//        } else if (Objects.equals(p.getUniqueId().toString(), ALFIE_UUID)) {
+//            rank = ChatColor.LIGHT_PURPLE + "[Builder] ";
+//        }
 
         Faction faction = NewFactionManager.getFactionFromPlayerID(p.getUniqueId());
         if (faction == null) {

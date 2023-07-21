@@ -1,17 +1,16 @@
 package org.ayple.hcfcore.commands.faction;
 
-import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
 import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.ayple.hcfcore.helpers.DateTimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -91,10 +90,22 @@ public class CommandFactionWho extends SubCommand {
             hq_z = Integer.toString((int) hq.getZ());
         }
 
-        String dtr = Faction.DTR_FORMAT.format(target_faction.getFactionDTR());
+        float fac_dtr = target_faction.getFactionDTR();
+        String dtr;
+
+        // just show it as raidable
+        // since it goes to like -0.00999f
+        // which obv messes up the string
+        if (fac_dtr < 0) {
+            dtr = Faction.DTR_FORMAT.format(-0.99f);
+        } else {
+            dtr = Faction.DTR_FORMAT.format(target_faction.getFactionDTR());
+        }
+
+//        String dtr = Faction.DTR_FORMAT.format(target_faction.getFactionDTR());
         String balance = target_faction.getFactionBal().toString();
 
-        player.sendMessage("-----------------------------------------------------");
+        player.sendMessage(ChatColor.DARK_GRAY + "-----------------------------------------------------");
 
         if (hq != null) {
             player.sendMessage(ChatColor.GOLD + faction_name + "[" + online_members + "/" + members_size + "]" + ChatColor.YELLOW + " HQ:    " + hq_x + ", " + hq_z);
@@ -149,10 +160,10 @@ public class CommandFactionWho extends SubCommand {
         }
 
         if (CooldownManager.hasDtrRegen(target_faction)) {
-            player.sendMessage(ChatColor.YELLOW + "DTR Regen Time: " + ChatColor.RESET + CooldownManager.getDtrRegenSecondLeft(target_faction));
+            player.sendMessage(ChatColor.YELLOW + "DTR Regen Time: " + ChatColor.RESET + DateTimeUtils.formatSecondsToMinutesSeconds(CooldownManager.getDtrRegenSecondLeft(target_faction)));
         }
 
-        player.sendMessage("-----------------------------------------------------");
+        player.sendMessage(ChatColor.DARK_GRAY + "-----------------------------------------------------");
     }
 
     private String getFactionMemberName(UUID id) {

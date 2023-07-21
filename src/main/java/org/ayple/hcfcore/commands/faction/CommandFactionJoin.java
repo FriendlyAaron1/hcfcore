@@ -38,23 +38,34 @@ public class CommandFactionJoin extends SubCommand {
         }
 
         if (NewFactionManager.getFactionFromPlayerID(player.getUniqueId()) != null) {
-            player.sendMessage("You are already in a faction! do /f leave first");
+            player.sendMessage(ChatColor.RED + "You are already in a faction! do /f leave first");
             return;
         }
 
         Faction target_faction = NewFactionManager.getFaction(args[1]);
         if (target_faction == null) {
-            player.sendMessage("That faction doesn't exist");
+            player.sendMessage(ChatColor.RED + "That faction doesn't exist");
+            return;
+        }
+
+        // prob better to check in cooldowns instead
+        if (target_faction.getFactionDTR() != target_faction.getMaxDTR()) {
+            player.sendMessage(ChatColor.RED + "They are currently on DTR regen and you cannot join!");
             return;
         }
 
         if (!target_faction.getFactionInvites().contains(player.getUniqueId())) {
-            player.sendMessage("You do not have an invite!");
+            player.sendMessage(ChatColor.RED + "You do not have an invite!");
             return;
         }
 
+        if (target_faction.getFactionMembersSize() == 4) {
+            player.sendMessage(ChatColor.RED + "That faction is full!");
+        }
 
-        FactionInviteManager.onPlayerJoinFaction(target_faction.getFactionID(), player.getUniqueId());
+
+        FactionInviteManager.onPlayerJoinFaction(target_faction.getFactionID(), player);
         player.sendMessage(ChatColor.GREEN + "Joined " + ChatColor.LIGHT_PURPLE + target_faction.getFactionName() + ChatColor.GREEN + "!");
+
     }
 }

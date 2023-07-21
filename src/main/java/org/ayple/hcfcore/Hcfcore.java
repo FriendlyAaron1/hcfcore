@@ -1,5 +1,6 @@
 package org.ayple.hcfcore;
 
+import net.milkbowl.vault.economy.Economy;
 import org.ayple.hcfcore.commands.*;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
@@ -9,21 +10,25 @@ import org.ayple.hcfcore.helpers.ConfigHelper;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.sql.SQLException;
 
+
+// NOTE: disabled event listeners  and command are most likely due to
+// using other plugins instead like essentials
+
 public final class Hcfcore extends JavaPlugin {
     private static Hcfcore INSTANCE;
-
 
     public static Hcfcore getInstance() {
         return INSTANCE;
     }
 
-
+    private static Economy economy = null;
     public boolean KITMAP_MODE = true;
 
     private ScoreboardManager scoreboardManager;
@@ -65,6 +70,14 @@ public final class Hcfcore extends JavaPlugin {
         this.board = scoreboardManager.getNewScoreboard();
 
 
+        if (!setupEconomy()) {
+            System.out.println("Disabled due to no Vault dependency!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+
+
 
 
         try {
@@ -90,24 +103,28 @@ public final class Hcfcore extends JavaPlugin {
         getCommand("logout").setExecutor(new CommandLogout());
         getCommand("balance").setExecutor(new CommandBalance());
         getCommand("pvpenable").setExecutor(new CommandPvpEnable());
-        getCommand("kit").setExecutor(new CommandKit());
+        getCommand("lives").setExecutor(new CommandLives());
+//        getCommand("kit").setExecutor(new CommandKit());
         //getCommand("serverclaim").setExecutor(new CommandServerClaim());
 
     }
 
     public void registerEvents() {
+
+
         PluginManager manager =  getServer().getPluginManager();
         manager.registerEvents(new AntiGriefEvent(), this);
         manager.registerEvents(new BannedItemListenerEvent(), this);
         manager.registerEvents(new BardEffectsEvent(), this);
+        manager.registerEvents(new BuyLifeSignEvent(), this);
         manager.registerEvents(new ClaimWandEvent(), this);
         manager.registerEvents(new CombatLoggerEvent(), this);
         manager.registerEvents(new DtrEventHandler(), this);
         manager.registerEvents(new EnchantLimiterEvent(), this);
         manager.registerEvents(new EndEventHandler(), this);
         manager.registerEvents(new GoldenAppleListenerEvent(), this);
-        manager.registerEvents(new KeyOpenEvent(), this);
-        manager.registerEvents(new KitEquipSignEvent(), this);
+        manager.registerEvents(new KillKeyHandlerEvent(), this);
+//        manager.registerEvents(new KitEquipSignEvent(), this);
         manager.registerEvents(new OnClickKitGUIEvent(), this);
         manager.registerEvents(new OnEnderPearlEvent(), this);
         manager.registerEvents(new OnPlayerMoveEvent(), this);
@@ -121,13 +138,27 @@ public final class Hcfcore extends JavaPlugin {
         manager.registerEvents(new PlayerUseChatEvent(), this);
         manager.registerEvents(new PotionRefillSignEvent(), this);
         manager.registerEvents(new PvpTimerEvent(), this);
-        manager.registerEvents(new ShopSignEvent(), this);
+//        manager.registerEvents(new ShopSignEvent(), this);
         manager.registerEvents(new SpawnListenerEvent(), this);
         manager.registerEvents(new TntDisablerEvent(), this);
     }
 
     @Override
     public void onDisable() {
+    }
+
+    private boolean setupEconomy()
+    {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+
+        return (economy != null);
+    }
+
+    public static Economy getEconomy() {
+        return economy;
     }
 
 }

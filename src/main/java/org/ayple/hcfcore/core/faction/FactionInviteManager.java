@@ -3,6 +3,8 @@ package org.ayple.hcfcore.core.faction;
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -29,29 +31,34 @@ public class FactionInviteManager {
     }
 
 
-    public static void onPlayerJoinFaction(UUID faction_id, UUID player_id) {
+    public static void onPlayerJoinFaction(UUID faction_id, Player player) {
         Faction faction = NewFactionManager.getFaction(faction_id);
         if (faction == null) {
             System.out.println("Faction wasn't fount? aborting.");
             return;
         }
 
-        faction.addFactionMember(player_id, 0);
-        faction.removeFactionInvite(player_id);
+        faction.addFactionMember(player.getUniqueId(), 0);
+        faction.removeFactionInvite(player.getUniqueId());
 
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
-                String sql = "INSERT INTO FACTION_MEMBERS (faction_id, player_uuid) VALUES (?, ?)";
+                String sql = "INSERT INTO faction_members (faction_id, player_uuid) VALUES (?, ?)";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
                 statement.setString(1, faction_id.toString());
-                statement.setString(2, player_id.toString());
+                statement.setString(2, player.getUniqueId().toString());
                 statement.executeUpdate();
                 conn.closeConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
+
+        faction.broadcastMessageToFaction(ChatColor.GREEN + player.getName() + "Has joined your faction!");
+
+        // TODO: change this into a reset dtr method
+        faction.setFactionDTR(faction.getMaxDTR());
 
 
 

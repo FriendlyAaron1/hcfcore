@@ -91,6 +91,13 @@ public class EnchantLimiterEvent implements Listener {
                         player.sendMessage(ChatColor.RED + "Illegal enchantment fount. Setting sharpness to 2!");
                     }
                 }
+
+                if (enchantments.containsKey(Enchantment.FIRE_ASPECT)) {
+                    if (enchantments.get(Enchantment.FIRE_ASPECT) > 2) {
+                        item.removeEnchantment(Enchantment.FIRE_ASPECT);
+                        player.sendMessage(ChatColor.RED + "Illegal enchantment fount. Removing fire aspect!");
+                    }
+                }
             }
         }
     }

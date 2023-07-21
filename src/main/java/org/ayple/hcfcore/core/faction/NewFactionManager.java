@@ -144,6 +144,8 @@ public class NewFactionManager {
     }
 
 
+
+
     // honestly this is completely irrelevant we would
     // need to check if its null afterward anyways lmao
     public static UUID getFactionIDFromName(String faction_name) {
@@ -237,19 +239,55 @@ public class NewFactionManager {
 //
 //    }
 
-
+    // setting dtr manually because its acting so gay
+    // if anyone reading this has a problem with it,
+    // too bad LOL. unless its me, then sorry man.
     public static void decreaseDTR(UUID faction_id) {
         Faction target_faction = factions.get(faction_id);
         if (target_faction == null) {
             System.out.println("cant find faction? [decreaseDTR]");
             return;
         }
+//
+//        final float new_dtr;
+//        final float current_dtr = target_faction.getFactionDTR();
+//        switch (target_faction.getFactionDTR()) {
+//            case 0.01f:
+//                new_dtr = -0.99f;
+//                break;
+//            case 1.01f:
+//                new_dtr = 0.01f;
+//                break;
+//            case 2.01f:
+//                new_dtr = 1.01f;
+//                break;
+//            case 3.01f:
+//                new_dtr = 2.01f;
+//                break;
+//            case 4.01f:
+//                new_dtr = 3.01f;
+//                break;
+//            case 5.01f:
+//                new_dtr = 4.01f;
+//                break;
+//        }
+
+//        if (current_dtr == 0.01f) new_dtr = -0.99f;
+//        else if (current_dtr == 1.01f) new_dtr = 1.01f;
+//        else if (current_dtr == 2.01f) new_dtr = 2.01f;
+//        else if (current_dtr == 3.01f) new_dtr = 3.01f;
+//        else if (current_dtr == 4.01f) new_dtr = 4.01f;
+//        else {
+//            new_dtr = -0.99f;
+//        }
 
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
                 String sql = "UPDATE factions SET dtr = dtr - 1 WHERE id=?";
+//                String sql = "UPDATE factions SET dtr = ? WHERE id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+//                statement.setFloat(1, new_dtr);
                 statement.setString(1, faction_id.toString());
                 statement.executeUpdate();
 
@@ -260,6 +298,7 @@ public class NewFactionManager {
         });
 
         target_faction.setFactionDTR(target_faction.getFactionDTR() - 1f);
+//        target_faction.setFactionDTR(new_dtr);
     }
 
     public static void kickPlayerFromFaction(Faction faction, OfflinePlayer player) {

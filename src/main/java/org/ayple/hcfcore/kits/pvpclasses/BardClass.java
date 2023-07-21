@@ -11,28 +11,28 @@ public class BardClass {
 
     public static void giveEffectToTargetPlayer(Material item_bard_holding, Player target_player) {
         if (item_bard_holding == Material.SUGAR) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, true));
         } else if (item_bard_holding == Material.BLAZE_POWDER) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 0, true));
         } else if (item_bard_holding == Material.MAGMA_CREAM) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0, true));
         } else if (item_bard_holding == Material.GOLDEN_CARROT) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100, 0, true));
         } else if (item_bard_holding == Material.IRON_INGOT) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0, true));
         }
     }
 
     // when bard right clicks on sugar give speed 3 instead of speed 2 (for example)
     public static boolean giveSpecialEffectToPlayer(Material item_bard_holding, Player target_player) {
         if (item_bard_holding == Material.SUGAR) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 2, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 2, true));
             return true;
         } else if (item_bard_holding == Material.BLAZE_POWDER) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 140, 1, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 140, 1, true));
             return true;
         } else if (item_bard_holding == Material.IRON_INGOT) {
-            target_player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 140, 1, false));
+            target_player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 140, 1, true));
             return true;
         }
 

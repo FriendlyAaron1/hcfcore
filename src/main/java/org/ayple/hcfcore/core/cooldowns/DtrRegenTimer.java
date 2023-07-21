@@ -14,7 +14,7 @@ public class DtrRegenTimer  extends BukkitRunnable {
 
     public DtrRegenTimer(Faction owner) {
         this.owner = owner;
-        this.seconds_left = 1800;
+        this.seconds_left = 3600;
         this.runTaskTimer(Hcfcore.getInstance(), 0, 20);
     }
 

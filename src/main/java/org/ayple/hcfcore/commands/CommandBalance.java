@@ -4,6 +4,7 @@ import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.BalanceHandler;
 import org.ayple.hcfcore.helpers.PlayerHelpers;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +17,8 @@ public class CommandBalance implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            int bal = BalanceHandler.getPlayerBalance(player);
-            player.sendMessage("Balance: " + Integer.toString(bal));
+            double bal = BalanceHandler.getPlayerBalance(player);
+            player.sendMessage(ChatColor.GREEN + "Balance: " + Double.toString(bal));
         }
 
 

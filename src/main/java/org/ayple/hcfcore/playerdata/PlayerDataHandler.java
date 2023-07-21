@@ -25,12 +25,9 @@ public class PlayerDataHandler {
 
             while (rs.next()) {
                 UUID player_id = UUID.fromString(rs.getString("player_id"));
-                int bal = rs.getInt("balance");
+                int lives = rs.getInt("lives");
                 int kills = rs.getInt("kills");
-                System.out.println(player_id);
-                System.out.println(bal);
-                System.out.println(kills);
-                player_data.put(player_id, new PlayerData(player_id, bal, kills));
+                player_data.put(player_id, new PlayerData(player_id, lives, kills));
             }
 
 
@@ -74,14 +71,14 @@ public class PlayerDataHandler {
             }
         });
 
-        player_data.put(player_id, new PlayerData(player_id, 500, 0));
+        player_data.put(player_id, new PlayerData(player_id, 0, 0));
     }
 
 
     public static void increasePlayerKillCount(Player killer) {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
-                String sql = "UPDATE player_data SET kills = kills + 1 WHERE player_uuid=?";
+                String sql = "UPDATE player_data SET kills = kills + 1 WHERE player_id=?";
                 HcfSqlConnection conn = new HcfSqlConnection();
                 PreparedStatement statement = conn.getConnection().prepareStatement(sql);
                 statement.setString(1, killer.getUniqueId().toString());
@@ -92,6 +89,56 @@ public class PlayerDataHandler {
         });
 
         getPlayerData(killer.getUniqueId()).incrementKills();
+    }
+
+
+    public static void setNewLivesForPlayer(Player player, int amount) {
+        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+            try {
+                String sql = "UPDATE player_data SET lives = ? WHERE player_id=?";
+                HcfSqlConnection conn = new HcfSqlConnection();
+                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+                statement.setInt(1, amount);
+                statement.setString(2, player.getUniqueId().toString());
+                conn.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        getPlayerData(player.getUniqueId()).setPlayerLives(amount);
+    }
+
+    public static void incrementLivesAmountForPlayer(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+            try {
+                String sql = "UPDATE player_data SET lives = lives + 1 WHERE player_id=?";
+                HcfSqlConnection conn = new HcfSqlConnection();
+                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+                statement.setString(1, player.getUniqueId().toString());
+                conn.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        getPlayerData(player.getUniqueId()).incrementPlayerLives();
+    }
+
+    public static void decrementLivesAmountForPlayer(Player player) {
+        Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
+            try {
+                String sql = "UPDATE player_data SET lives = lives - 1 WHERE player_id=?";
+                HcfSqlConnection conn = new HcfSqlConnection();
+                PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+                statement.setString(1, player.getUniqueId().toString());
+                conn.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        getPlayerData(player.getUniqueId()).decrementPlayerLives();
     }
 
 

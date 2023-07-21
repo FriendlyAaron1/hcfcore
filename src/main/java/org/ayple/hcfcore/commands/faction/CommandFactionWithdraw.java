@@ -36,14 +36,14 @@ public class CommandFactionWithdraw extends SubCommand {
                 return;
             }
 
-            int faction_bal = player_faction.getFactionBal();
+            double faction_bal = player_faction.getFactionBal();
 
-            int amount;
+            double amount;
 
             if (args[1].equalsIgnoreCase("all")) {
                 amount = BalanceHandler.getPlayerBalance(player);
             } else {
-                amount = Integer.parseInt(args[1]);
+                amount = Double.parseDouble(args[1]);
             }
 
             //int player_bal = BalanceHandler.getPlayerBalance(player);
@@ -51,7 +51,7 @@ public class CommandFactionWithdraw extends SubCommand {
             if (faction_bal >= amount) {
                 BalanceHandler.giveMoneyToPlayer(player, amount);
                 BalanceHandler.takeMoneyFromFaction(player_faction.getFactionID(), amount);
-                player.sendMessage(ChatColor.GREEN + "Withdrew $" + Integer.toString(amount) + " from the faction balance!");
+                player.sendMessage(ChatColor.GREEN + "Withdrew $" + Double.toString(amount) + " from the faction balance!");
                 return;
             }
 

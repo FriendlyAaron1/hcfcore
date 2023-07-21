@@ -7,10 +7,13 @@ import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -40,8 +43,25 @@ public class PlayerDeathBanEvent implements Listener {
         Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), "Death banned!", unban_date, null);
         player.kickPlayer("You died, banned for 4 hours");
 
+    }
 
+    @EventHandler
+    public void onLogin(PlayerLoginEvent event){
+        Player player = event.getPlayer();
+        if (player.isBanned()) {
+            String ban_reason = event.getKickMessage();
+            if (ban_reason.toLowerCase().contains("death ban")) {
+                if (PlayerDataHandler.getPlayerData(event.getPlayer().getUniqueId()).getLives() > 0) {
+//                    Bukkit.getServer().getOfflinePlayer(player.getUniqueId()).setBanned(false);
+                    Bukkit.getServer().getBanList(BanList.Type.NAME).pardon(player.getName());
+                    event.setResult(PlayerLoginEvent.Result.ALLOWED);
+                    event.setKickMessage(null);
 
+                    PlayerDataHandler.decrementLivesAmountForPlayer(player);
+                    player.sendMessage(ChatColor.GREEN + "Revived by using a life!");
 
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ DB_USER: root
 
 server_name: 'cheeky hcf'
 map_number: 1
+faction_limit: 4
 
 kitmap_mode: false
 

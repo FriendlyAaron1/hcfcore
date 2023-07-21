@@ -30,7 +30,7 @@ public class CommandFactionDeposit extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (args.length >= 2) {
-            int amount;
+            double amount;
 
             if (args[1].equalsIgnoreCase("all")) {
                 amount = BalanceHandler.getPlayerBalance(player);
@@ -49,7 +49,7 @@ public class CommandFactionDeposit extends SubCommand {
             if (BalanceHandler.getPlayerBalance(player) >= amount) {
                 BalanceHandler.takeMoneyFromPlayer(player, amount);
                 BalanceHandler.giveMoneyToFaction(player_faction.getFactionID(), amount);
-                player.sendMessage(ChatColor.GREEN + "Deposited " + Integer.toString(amount) + " into the faction balance!");
+                player.sendMessage(ChatColor.GREEN + "Deposited " + Double.toString(amount) + " into the faction balance!");
                 return;
             }
 
