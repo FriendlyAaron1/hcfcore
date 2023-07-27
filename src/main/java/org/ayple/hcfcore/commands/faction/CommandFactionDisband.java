@@ -41,6 +41,10 @@ public class CommandFactionDisband extends SubCommand {
             return;
         }
 
+        if (faction.onDtrFreeze()) {
+            player.sendMessage(ChatColor.RED + "Your faction is on DTR freeze!");
+        }
+
         NewFactionManager.disbandFaction(faction.getFactionID());
         player.sendMessage(ChatColor.GREEN + "Your faction has been disbanded!");
 

@@ -1,1 +1,1 @@
-ranks was changed to work with another plugin (LightPerms 2.1.3) instead
+ranks was changed to work with another plugin (luckyperms) instead

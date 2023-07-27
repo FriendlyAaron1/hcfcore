@@ -1,6 +1,5 @@
 package org.ayple.hcfcore.commands;
 
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

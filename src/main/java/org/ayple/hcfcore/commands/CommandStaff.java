@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.commands;
 
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.StaffHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,12 +27,20 @@ public class CommandStaff implements CommandExecutor {
             return true;
         }
 
-        if (args.length > 0) {
-            for (SubCommand subcommand : subcommands) {
-                if (args[0].equalsIgnoreCase(subcommand.getName())) {
-                    subcommand.runCommand(player, args);
-                    return true;
-                }
+        if (args.length == 0) {
+            if (!StaffHandler.playerInStaffMode(player)) {
+                StaffHandler.onEnterStaffMode(player);
+            } else {
+                StaffHandler.onExitStaffMode(player);
+            }
+
+            return true;
+        }
+
+        for (SubCommand subcommand : subcommands) {
+            if (args[0].equalsIgnoreCase(subcommand.getName())) {
+                subcommand.runCommand(player, args);
+                return true;
             }
         }
 

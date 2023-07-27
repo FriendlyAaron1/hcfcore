@@ -1,11 +1,9 @@
 package org.ayple.hcfcore.core.cooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Objective;
 
 public class DtrRegenTimer  extends BukkitRunnable {
     private Faction owner;

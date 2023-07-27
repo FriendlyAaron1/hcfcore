@@ -48,8 +48,13 @@ public class CommandFactionJoin extends SubCommand {
             return;
         }
 
+        if (target_faction.factionFull()) {
+            player.sendMessage(ChatColor.RED + "That faction is full!");
+            return;
+        }
+
         // prob better to check in cooldowns instead
-        if (target_faction.getFactionDTR() != target_faction.getMaxDTR()) {
+        if (target_faction.onDtrFreeze()) {
             player.sendMessage(ChatColor.RED + "They are currently on DTR regen and you cannot join!");
             return;
         }
@@ -57,10 +62,6 @@ public class CommandFactionJoin extends SubCommand {
         if (!target_faction.getFactionInvites().contains(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "You do not have an invite!");
             return;
-        }
-
-        if (target_faction.getFactionMembersSize() == 4) {
-            player.sendMessage(ChatColor.RED + "That faction is full!");
         }
 
 

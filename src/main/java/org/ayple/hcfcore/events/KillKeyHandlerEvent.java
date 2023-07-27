@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.crates.KillKey;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -17,6 +18,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Objects;
 
+
+
+// TODO: migrate to a proper plugin like CratesReloaded - 23/07/23 @AyPle
 public class KillKeyHandlerEvent implements Listener {
 
     // should prob remove the skull stuff into its own listener but oh well
@@ -31,30 +35,36 @@ public class KillKeyHandlerEvent implements Listener {
 
         player.getWorld().dropItem(player.getLocation(), KillKey.getKeyItem());
         player.getWorld().dropItem(player.getLocation(), player_skull);
+//        Bukkit.getServer().dispatchCommand("crates give")
 
 
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onInteract(PlayerInteractEvent event) {
-        ItemStack item_in_hand = event.getPlayer().getItemInHand();
 
-        if (item_in_hand == null) return;
-        if (item_in_hand.getType() != Material.TRIPWIRE_HOOK ) return;
+    // Changed to crates plugin
+//    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+//    public void onInteract(PlayerInteractEvent event) {
+//        ItemStack item_in_hand = event.getPlayer().getItemInHand();
 
-
-        ItemMeta meta = item_in_hand.getItemMeta();
-        if (Objects.equals(meta.getDisplayName(), ChatColor.RED + "Kill Key") && meta.getLore().contains(ChatColor.GOLD + "Right click to open key!")) {
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                item_in_hand.setAmount(1); // just to make sure it only takes 1
-                event.getPlayer().getInventory().removeItem(item_in_hand);
-                event.getPlayer().getInventory().addItem(KillKey.getRandomItems());
-                event.setCancelled(true);
-
-            }
-        }
+//        if (item_in_hand == null) return;
+//        if (item_in_hand.getType() != Material.TRIPWIRE_HOOK ) return;
 
 
+//        ItemMeta meta = item_in_hand.getItemMeta();
+//        if (Objects.equals(meta.getDisplayName(), ChatColor.RED + "Kill Key") && meta.getLore().contains(ChatColor.GOLD + "Right click to open key!")) {
+//            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR
+//                    || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)
+//            {
+//
+//                item_in_hand.setAmount(1); // just to make sure it only takes 1
+//                event.getPlayer().getInventory().removeItem(item_in_hand);
+//                event.getPlayer().getInventory().addItem(KillKey.getRandomItems());
+//                event.setCancelled(true);
+//
+//            }
+//        }
 
-    }
+
+
+//    }
 }

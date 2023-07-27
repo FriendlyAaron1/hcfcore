@@ -4,11 +4,15 @@ import net.milkbowl.vault.economy.Economy;
 import org.ayple.hcfcore.commands.*;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
+import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.events.*;
 import org.ayple.hcfcore.helpers.ConfigHelper;
+import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +39,12 @@ public final class Hcfcore extends JavaPlugin {
     public static ScoreboardManager getScoreManager() { return INSTANCE.scoreboardManager; }
     private Scoreboard board;
     public static Scoreboard getScoreBoard() { return INSTANCE.board; }
+
+    private int FACTION_SIZE_LIMIT = 5;
+
+    private boolean SOTW_MODE = false;
+
+
 
     @Override
     public void onEnable() {
@@ -65,6 +75,7 @@ public final class Hcfcore extends JavaPlugin {
         ConfigHelper.save();
 
         KITMAP_MODE = ConfigHelper.getConfig().getBoolean("kitmap_mode");
+        FACTION_SIZE_LIMIT = ConfigHelper.getConfig().getInt("faction_limit");
 
         this.scoreboardManager = Bukkit.getScoreboardManager();
         this.board = scoreboardManager.getNewScoreboard();
@@ -81,6 +92,7 @@ public final class Hcfcore extends JavaPlugin {
 
 
         try {
+            HcfSqlConnection.createDatabase();
             NewFactionManager.loadFactions();
             PlayerDataHandler.loadAllPlayerData();
             ClaimsManager.reloadClaims();
@@ -104,6 +116,8 @@ public final class Hcfcore extends JavaPlugin {
         getCommand("balance").setExecutor(new CommandBalance());
         getCommand("pvpenable").setExecutor(new CommandPvpEnable());
         getCommand("lives").setExecutor(new CommandLives());
+        getCommand("revive").setExecutor(new CommandRevive());
+        getCommand("staff").setExecutor(new CommandStaff());
 //        getCommand("kit").setExecutor(new CommandKit());
         //getCommand("serverclaim").setExecutor(new CommandServerClaim());
 
@@ -120,6 +134,7 @@ public final class Hcfcore extends JavaPlugin {
         manager.registerEvents(new ClaimWandEvent(), this);
         manager.registerEvents(new CombatLoggerEvent(), this);
         manager.registerEvents(new DtrEventHandler(), this);
+        manager.registerEvents(new ElevatorEventListener(), this);
         manager.registerEvents(new EnchantLimiterEvent(), this);
         manager.registerEvents(new EndEventHandler(), this);
         manager.registerEvents(new GoldenAppleListenerEvent(), this);
@@ -160,5 +175,57 @@ public final class Hcfcore extends JavaPlugin {
     public static Economy getEconomy() {
         return economy;
     }
+
+
+    public void broadcastMessage(String message) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage(message);
+        }
+    }
+
+    public void broadcastPlayerMessage(Player sender, String message) {
+        Faction sender_faction = NewFactionManager.getFactionFromPlayerID(sender.getUniqueId());
+
+        // if no faction then just send a message to every player as yellow name
+        // else check the factions, shouldn't be too bad on the optmization
+        // point but oh well.
+        if (sender_faction == null) {
+            for (Player player: Bukkit.getOnlinePlayers()) {
+                player.sendMessage(ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.RESET + message);
+            }
+
+            return;
+        }
+
+        for (Player player: Bukkit.getOnlinePlayers()) {
+            Faction player_faction = NewFactionManager.getFactionFromPlayerID(player.getUniqueId());
+            if (player_faction != null) {
+                // if in same faction
+                if (sender_faction.getFactionID() == player_faction.getFactionID()) {
+                    player.sendMessage(ChatColor.GREEN + "[" + sender_faction.getFactionName() + "] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.RESET + message);
+                } else {
+                    player.sendMessage(ChatColor.YELLOW + "[" + sender_faction.getFactionName() + "] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.RESET + message);
+                }
+            }
+
+
+        }
+    }
+
+    public int getTeamLimitSize() {
+        return this.FACTION_SIZE_LIMIT;
+    }
+
+    public void enableSOTWMode() {
+        this.SOTW_MODE = true;
+    }
+
+    public void disableSOTWMode() {
+        this.SOTW_MODE = false;
+    }
+
+    public boolean serverInSOTWMode() { return this.SOTW_MODE; }
+
+    public boolean serverInKitmapMode() { return this.KITMAP_MODE; }
 
 }

@@ -18,7 +18,11 @@ public class ServerScoreboard {
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("scoreboard", "dummy");
 
-        objective.setDisplayName(ChatColor.GOLD + "     " + SERVER_NAME + " [Map " + MAP_NUMBER + "]     ");
+        if (Hcfcore.getInstance().serverInKitmapMode()) {
+            objective.setDisplayName(ChatColor.GOLD + "     " + SERVER_NAME + " [KITMAP]");
+        } else {
+            objective.setDisplayName(ChatColor.GOLD + "     " + SERVER_NAME + " [Map " + MAP_NUMBER + "]     ");
+        }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         objective.getScore("").setScore(0);

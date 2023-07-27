@@ -25,13 +25,13 @@ public class KitEquipSignEvent implements Listener {
 
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
 
-        if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
-        if (e.getClickedBlock().getState() instanceof Sign) {
+        if (!(event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
+        if (event.getClickedBlock().getState() instanceof Sign) {
 
-            Sign sign = (Sign) e.getClickedBlock().getState();
+            Sign sign = (Sign) event.getClickedBlock().getState();
             if (sign.getLine(1).equals(ChatColor.BLUE + "Diamond")) {
                 KitManager.diamondkit.givePlayerKit(player);
                 player.getInventory().clear();

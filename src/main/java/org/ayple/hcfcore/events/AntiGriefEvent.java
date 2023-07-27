@@ -4,8 +4,10 @@ import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.bukkit.*;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -34,11 +36,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 //            }
 
 public class AntiGriefEvent implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (player.isOp() && player.getGameMode() == GameMode.CREATIVE) return;
+        if ((player.isOp() || player.hasPermission("hcf.core.griefbypass")) && player.getGameMode() == GameMode.CREATIVE) return;
 
         World player_world = player.getWorld();
 //        boolean player_in_nether = player_world.getEnvironment().equals(World.Environment.NETHER);
@@ -58,6 +60,10 @@ public class AntiGriefEvent implements Listener {
 
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock() instanceof Sign) {
+                return;
+            }
+
             if (player.getInventory().getItemInHand() != null) {
                 if (player.getInventory().getItemInHand().getType() == Material.ENDER_PEARL) {
                     return;
@@ -79,8 +85,6 @@ public class AntiGriefEvent implements Listener {
 
                 // players in wilderness
                 if (claim == null)  {
-
-
                     if (ClaimsManager.playerInWarzone(player)) {
                         player.sendMessage(ChatColor.RED + "You cannot interact in Warzone!");
                         event.setCancelled(true);

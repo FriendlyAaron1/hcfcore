@@ -2,8 +2,7 @@ package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.ChatColor;

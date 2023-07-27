@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -11,7 +11,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class OnEnderPearlEvent implements Listener {
-    @EventHandler
+    @EventHandler(ignoreCancelled = false)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (event.getEntity().getType() == EntityType.ENDER_PEARL) {
             if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player) {

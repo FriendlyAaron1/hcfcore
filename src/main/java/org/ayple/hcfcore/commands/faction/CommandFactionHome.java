@@ -1,16 +1,12 @@
 package org.ayple.hcfcore.commands.faction;
 
-import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.sql.SQLException;
 
 public class CommandFactionHome extends SubCommand {
     @Override

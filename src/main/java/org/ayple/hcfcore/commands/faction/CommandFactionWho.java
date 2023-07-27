@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.ayple.hcfcore.helpers.DateTimeUtils;

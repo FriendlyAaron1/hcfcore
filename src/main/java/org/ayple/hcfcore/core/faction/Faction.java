@@ -4,10 +4,8 @@ import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
 import java.sql.PreparedStatement;
@@ -24,6 +22,9 @@ public class Faction {
 
     private final UUID factionID;
     public UUID getFactionID() { return this.factionID; }
+
+
+    public final Team teamInstance;
 
     private String factionName;
     public String getFactionName() { return this.factionName; }
@@ -84,21 +85,23 @@ public class Faction {
 
     private final Hashtable<UUID, Integer> factionMembers = new Hashtable<UUID, Integer>();
     public Hashtable<UUID, Integer> getFactionMembers() { return this.factionMembers; }
-    public boolean removeFactionMember(UUID member_id) {
-        if (factionMembers.get(member_id) == 3) {
+    public boolean removeFactionMember(UUID player_id) {
+        if (factionMembers.get(player_id) == 3) {
             System.out.println("Can't kick them, they are the leader!");
             return false;
         }
 
-        factionMembers.remove(member_id);
+        factionMembers.remove(player_id);
+        teamInstance.removeEntry(Bukkit.getOfflinePlayer(player_id).getName());
         return true;
     }
     public void addFactionMember(UUID player_id, int rank) {
         if (factionMembers.get(player_id) != null) {
-            System.out.println("POSSIBLE ERROR: adding a member to a faction theyre already stored in?");
+            System.out.println("POSSIBLE ERROR: adding a member to a faction they're already stored in?");
         }
 
         factionMembers.put(player_id, rank);
+        teamInstance.addEntry(Bukkit.getOfflinePlayer(player_id).getName());
     }
 
     public void changeFactionMemberRank(UUID player_id, int rank) {
@@ -157,10 +160,20 @@ public class Faction {
         this.claim = claim;
         this.dtr = dtr;
         this.bal = bal;
+        this.teamInstance = Hcfcore.getScoreManager().getMainScoreboard().registerNewTeam(faction_id.toString());
+
     }
 
     public int getFactionMembersSize() {
         return this.getFactionMembers().size();
+    }
+
+    public boolean onDtrFreeze() {
+        return this.getFactionDTR() != this.getMaxDTR();
+    }
+
+    public boolean factionFull() {
+        return this.getFactionMembersSize() >= Hcfcore.getInstance().getTeamLimitSize();
     }
 
     public int getOnlineMembersSize() {
@@ -183,6 +196,10 @@ public class Faction {
                 target_player.getPlayer().sendMessage(message);
             }
         }
+    }
+
+    public boolean factionContainsPlayer(UUID player_id) {
+        return getFactionMembers().containsKey(player_id);
     }
 
 

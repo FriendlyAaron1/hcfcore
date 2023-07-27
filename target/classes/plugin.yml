@@ -22,6 +22,9 @@ commands:
     description: "display your lives"
     usage: "/lives"
 
+  revive:
+    description: "revive a player"
+    usage: "/revive [player_name]"
 
 #  kit:
 #    description: "get a kit"
@@ -30,3 +33,7 @@ commands:
   pvpenable:
     description: "disables your pvp timer"
     usage: "/pvpenable"
+
+  staff:
+    description: "enable staff mode"
+    usage: "/staff"

@@ -1,8 +1,7 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
-import org.bukkit.Bukkit;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

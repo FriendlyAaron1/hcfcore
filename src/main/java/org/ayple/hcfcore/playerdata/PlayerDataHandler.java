@@ -3,6 +3,7 @@ package org.ayple.hcfcore.playerdata;
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -92,7 +93,7 @@ public class PlayerDataHandler {
     }
 
 
-    public static void setNewLivesForPlayer(Player player, int amount) {
+    public static void setNewLivesForPlayer(OfflinePlayer player, int amount) {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
                 String sql = "UPDATE player_data SET lives = ? WHERE player_id=?";
@@ -109,7 +110,7 @@ public class PlayerDataHandler {
         getPlayerData(player.getUniqueId()).setPlayerLives(amount);
     }
 
-    public static void incrementLivesAmountForPlayer(Player player) {
+    public static void incrementLivesAmountForPlayer(OfflinePlayer player) {
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {
                 String sql = "UPDATE player_data SET lives = lives + 1 WHERE player_id=?";

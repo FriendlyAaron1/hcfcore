@@ -1,5 +1,6 @@
 package org.ayple.hcfcore.events;
 
+import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.Bukkit;
@@ -24,7 +25,10 @@ public class PlayerUseChatEvent implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         final Player p = event.getPlayer();
         final String msg = event.getMessage();
-        String rank = "";
+        event.setCancelled(true);
+        Hcfcore.getInstance().broadcastPlayerMessage(p, msg);
+
+        //        String rank = "";
 //
 //        if (Objects.equals(p.getUniqueId().toString(), OWNER_UUID)) {
 //            rank = ChatColor.RED + "[Owner] ";
@@ -36,16 +40,16 @@ public class PlayerUseChatEvent implements Listener {
 //            rank = ChatColor.LIGHT_PURPLE + "[Builder] ";
 //        }
 
-        Faction faction = NewFactionManager.getFactionFromPlayerID(p.getUniqueId());
-        if (faction == null) {
-            Bukkit.broadcastMessage(rank + ChatColor.YELLOW + p.getDisplayName() + ": " + ChatColor.RESET + msg);
-            event.setCancelled(true);
-            return;
-        }
-
-
-        Bukkit.broadcastMessage(rank + ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + p.getDisplayName() + ": " + msg);
-        event.setCancelled(true);
+//        Faction faction = NewFactionManager.getFactionFromPlayerID(p.getUniqueId());
+//        if (faction == null) {
+//            Bukkit.broadcastMessage(rank + ChatColor.YELLOW + p.getDisplayName() + ": " + ChatColor.RESET + msg);
+//            event.setCancelled(true);
+//            return;
+//        }
+//
+//
+//        Bukkit.broadcastMessage(rank + ChatColor.YELLOW + "[" + faction.getFactionName() + "] " + ChatColor.WHITE + p.getDisplayName() + ": " + msg);
+//        event.setCancelled(true);
     }
 
 }

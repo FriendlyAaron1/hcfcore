@@ -1,11 +1,7 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.core.cooldowns.CooldownManager;
-import org.ayple.hcfcore.core.faction.Faction;
-import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.scoreboard.ServerScoreboard;
-import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,11 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class PlayerJoinedServerEvent implements Listener {
 
