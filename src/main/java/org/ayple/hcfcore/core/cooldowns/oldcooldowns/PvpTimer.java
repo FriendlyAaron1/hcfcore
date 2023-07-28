@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.core.cooldowns.oldcooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

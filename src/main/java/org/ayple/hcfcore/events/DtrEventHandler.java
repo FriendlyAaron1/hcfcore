@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.Hcfcore;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.entity.Player;

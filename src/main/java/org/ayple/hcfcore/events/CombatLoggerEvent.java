@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;

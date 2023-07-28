@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

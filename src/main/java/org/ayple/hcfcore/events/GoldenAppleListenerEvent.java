@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ public class GoldenAppleListenerEvent implements Listener {
             return;
         }
 
-        if (CooldownManager.hasCrappleCooldown(player)) {
+        if (CooldownManager.hasCrappleCooldown(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "You are currently on golden apple cooldown!");
             event.setCancelled(true);
             return;

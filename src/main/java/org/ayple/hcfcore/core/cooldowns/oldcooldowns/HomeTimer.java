@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.core.cooldowns.oldcooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class HomeTimer extends BukkitRunnable {
     @Override
     public void run() {
         if (seconds_left == 0) {
-            CooldownManager.onFinishedHomeTimer(owner);
+            CooldownManager.onFinishedHomeTimer(owner.getUniqueId());
             this.objective.getScoreboard().resetScores(ChatColor.GREEN + "Home Timer:");
             owner.teleport(hq);
             cancel();

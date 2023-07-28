@@ -6,6 +6,7 @@ import org.ayple.hcfcore.core.claims.ClaimsManager;
 import org.ayple.hcfcore.core.claims.serverclaim.SpawnClaim;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
+import org.ayple.hcfcore.core.scoreboard.ScoreboardHandler;
 import org.ayple.hcfcore.events.*;
 import org.ayple.hcfcore.helpers.ConfigHelper;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
@@ -35,14 +36,11 @@ public final class Hcfcore extends JavaPlugin {
     private static Economy economy = null;
     public boolean KITMAP_MODE = true;
 
-    private ScoreboardManager scoreboardManager;
-    public static ScoreboardManager getScoreManager() { return INSTANCE.scoreboardManager; }
-    private Scoreboard board;
-    public static Scoreboard getScoreBoard() { return INSTANCE.board; }
-
     private int FACTION_SIZE_LIMIT = 5;
 
     private boolean SOTW_MODE = false;
+
+    private final ScoreboardHandler SCOREBOARD_HANDLER = new ScoreboardHandler();
 
 
 
@@ -76,9 +74,6 @@ public final class Hcfcore extends JavaPlugin {
 
         KITMAP_MODE = ConfigHelper.getConfig().getBoolean("kitmap_mode");
         FACTION_SIZE_LIMIT = ConfigHelper.getConfig().getInt("faction_limit");
-
-        this.scoreboardManager = Bukkit.getScoreboardManager();
-        this.board = scoreboardManager.getNewScoreboard();
 
 
         if (!setupEconomy()) {
@@ -162,6 +157,10 @@ public final class Hcfcore extends JavaPlugin {
     public void onDisable() {
     }
 
+    public ScoreboardHandler getScoreboardHandler() {
+        return this.SCOREBOARD_HANDLER;
+    }
+
     private boolean setupEconomy()
     {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
@@ -225,6 +224,7 @@ public final class Hcfcore extends JavaPlugin {
     }
 
     public boolean serverInSOTWMode() { return this.SOTW_MODE; }
+    public int getSOTWSecondsLeft() { return 0; }
 
     public boolean serverInKitmapMode() { return this.KITMAP_MODE; }
 

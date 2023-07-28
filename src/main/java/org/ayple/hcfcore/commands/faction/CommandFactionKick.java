@@ -51,7 +51,7 @@ public class CommandFactionKick extends SubCommand {
         }
 
         OfflinePlayer target_player = Bukkit.getOfflinePlayer(args[1]);
-        if (player_faction.getFactionMembers().get(target_player) == 3) {
+        if (player_faction.getFactionMembers().get(target_player.getUniqueId()) == 3) {
             player.sendMessage(ChatColor.RED + "That player is the leader and can't be kicked!");
             return;
         }

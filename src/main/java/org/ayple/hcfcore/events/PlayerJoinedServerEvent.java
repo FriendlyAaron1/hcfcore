@@ -1,8 +1,11 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
+import org.ayple.hcfcore.core.scoreboard.PlayerBoard;
 import org.ayple.hcfcore.core.scoreboard.ServerScoreboard;
 import org.ayple.hcfcore.playerdata.PlayerDataHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,7 +20,10 @@ public class PlayerJoinedServerEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.setScoreboard(ServerScoreboard.newScoreboard());
+
+
+
+
 
         if (!PlayerDataHandler.playerLoggedInBefore(player.getUniqueId())) {
             PlayerDataHandler.onLoginFirstTime(player.getUniqueId());
@@ -25,12 +31,12 @@ public class PlayerJoinedServerEvent implements Listener {
             CooldownManager.registerPvpTimer(player);
         }
 
-        if (CooldownManager.playerHasPvpTimer(player)) {
-            player.sendMessage(ChatColor.GREEN + "Detected pvp timer, adding it to scoreboard!");
-            CooldownManager.showPvpTimer(player);
-        }
+//        if (CooldownManager.playerHasPvpTimer(player)) {
+//            player.sendMessage(ChatColor.GREEN + "Detected pvp timer, adding it to scoreboard!");
+//            CooldownManager.showPvpTimer(player);
+//        }
 
-
+        Hcfcore.getInstance().getScoreboardHandler().onPlayerJoinServer(player);
     }
 
     private void giveStarterItems(Player player) {

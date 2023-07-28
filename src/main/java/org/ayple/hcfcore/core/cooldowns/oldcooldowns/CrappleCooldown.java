@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.core.cooldowns.oldcooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,7 +23,7 @@ public class CrappleCooldown extends BukkitRunnable {
     @Override
     public void run() {
         if (seconds_left == 0) {
-            CooldownManager.onFinishedCrappleCooldown(this.owner);
+            CooldownManager.onFinishedCrappleCooldown(this.owner.getUniqueId());
             this.objective.getScoreboard().resetScores(ChatColor.GOLD + "Crapple Cooldown:");
             cancel();
         } else {

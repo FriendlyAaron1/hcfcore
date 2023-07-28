@@ -1,6 +1,7 @@
 package org.ayple.hcfcore.core.cooldowns.oldcooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,7 +24,7 @@ public class CombatTimer extends BukkitRunnable {
     @Override
     public void run() {
         if (seconds_left == 0) {
-            CooldownManager.onCombatTimerOver(owner);
+            CooldownManager.onCombatTimerOver(owner.getUniqueId());
             this.objective.getScoreboard().resetScores(ChatColor.DARK_RED + "Combat Cooldown: ");
             cancel();
         } else {

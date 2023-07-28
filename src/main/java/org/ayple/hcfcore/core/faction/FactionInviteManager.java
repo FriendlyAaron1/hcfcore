@@ -40,6 +40,7 @@ public class FactionInviteManager {
 
         faction.addFactionMember(player.getUniqueId(), 0);
         faction.removeFactionInvite(player.getUniqueId());
+        Hcfcore.getInstance().getScoreboardHandler().onPlayerJoinedFaction(player, faction);
 
         Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {
             try {

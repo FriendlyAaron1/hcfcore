@@ -35,7 +35,6 @@ public class SotwTimer extends BukkitRunnable {
         if (seconds_left == 0) {
             Hcfcore.getInstance().disableSOTWMode();
             cancel();
-            Material.NETHER_WARTSe
 
         } else {
             seconds_left--;

@@ -1,19 +1,17 @@
 package org.ayple.hcfcore.core.cooldowns.newcooldowns;
 
-import org.ayple.hcfcore.core.cooldowns.AbstractCooldown;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
-import org.bukkit.ChatColor;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.bukkit.entity.Player;
 
 public class CombatTimer extends AbstractCooldown {
 
     public CombatTimer(Player owner) {
-        super(owner, 3600, "combat_timer", ChatColor.DARK_RED + "Combat Timer: ");
+        super(owner, 30, "combat_timer");
     }
 
     @Override
     public void onTimerFinished() {
-        CooldownManager.onFinishedPvpTimer(this.getOwnerID());
+        CooldownManager.onCombatTimerOver(this.ownerID);
     }
 
     @Override

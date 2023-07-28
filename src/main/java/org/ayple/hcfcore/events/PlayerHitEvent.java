@@ -2,7 +2,7 @@ package org.ayple.hcfcore.events;
 
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.ChatColor;
@@ -19,13 +19,13 @@ public class PlayerHitEvent implements Listener {
             Player whoWasHit = (Player) event.getEntity();
             Player whoHit = (Player) event.getDamager();
 
-            if (CooldownManager.playerHasPvpTimer(whoHit)) {
+            if (CooldownManager.playerHasPvpTimer(whoHit.getUniqueId())) {
                 whoHit.sendMessage(ChatColor.RED + "Cannot hit as you have pvp timer!");
                 event.setCancelled(true);
                 return;
             }
 
-            if (CooldownManager.playerHasPvpTimer(whoWasHit)) {
+            if (CooldownManager.playerHasPvpTimer(whoWasHit.getUniqueId())) {
                 whoHit.sendMessage(ChatColor.RED + "Cannot hit them as they have pvp timer!");
                 event.setCancelled(true);
                 return;
@@ -40,14 +40,14 @@ public class PlayerHitEvent implements Listener {
                     return;
                 }
 
-                if (checkSameFaction(whoWasHit, whoHit)) {
-                    whoHit.sendMessage(ChatColor.RED + "Cannot hurt " + ChatColor.GREEN + whoWasHit.getDisplayName() + ChatColor.RED + "!");
-                    event.setCancelled(true);
-                    return;
-                }
+
             }
 
-
+            if (checkSameFaction(whoWasHit, whoHit)) {
+                whoHit.sendMessage(ChatColor.RED + "Cannot hurt " + ChatColor.GREEN + whoWasHit.getDisplayName() + ChatColor.RED + "!");
+                event.setCancelled(true);
+                return;
+            }
 
 
             CooldownManager.registerCombatTimer(whoHit.getPlayer());
@@ -55,17 +55,17 @@ public class PlayerHitEvent implements Listener {
 
             // cancel home timers
             if (CooldownManager.hasHomeTimer(whoWasHit.getUniqueId()))
-                    CooldownManager.cancelHomeTimer(whoWasHit);
+                    CooldownManager.cancelHomeTimer(whoWasHit.getUniqueId());
 
             if (CooldownManager.hasHomeTimer(whoHit.getUniqueId()))
-                CooldownManager.cancelHomeTimer(whoHit);
+                CooldownManager.cancelHomeTimer(whoHit.getUniqueId());
 
             // cancel logout timers
-            if (CooldownManager.hasLogoutTimer(whoWasHit))
-                CooldownManager.cancelLogoutTimer(whoWasHit);
+            if (CooldownManager.hasLogoutTimer(whoWasHit.getUniqueId()))
+                CooldownManager.cancelLogoutTimer(whoWasHit.getUniqueId());
 
-            if (CooldownManager.hasLogoutTimer(whoHit))
-                CooldownManager.cancelLogoutTimer(whoHit);
+            if (CooldownManager.hasLogoutTimer(whoHit.getUniqueId()))
+                CooldownManager.cancelLogoutTimer(whoHit.getUniqueId());
         }
     }
 

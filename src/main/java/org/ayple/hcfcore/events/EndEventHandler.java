@@ -1,6 +1,6 @@
 package org.ayple.hcfcore.events;
 
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.helpers.ConfigHelper;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -37,7 +37,7 @@ public class EndEventHandler implements Listener {
 
             } else if (event.getTo().getWorld().getEnvironment() == World.Environment.THE_END) {
                 System.out.println("Entering portal!");
-                if (CooldownManager.playerHasPvpTimer(event.getPlayer())) {
+                if (CooldownManager.playerHasPvpTimer(event.getPlayer().getUniqueId())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You cannot enter the end with Pvp Timer!");
                     event.setCancelled(true);
                     return;

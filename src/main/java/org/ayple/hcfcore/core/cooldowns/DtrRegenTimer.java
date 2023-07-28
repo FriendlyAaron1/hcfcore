@@ -1,7 +1,6 @@
 package org.ayple.hcfcore.core.cooldowns;
 
 import org.ayple.hcfcore.Hcfcore;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.bukkit.scheduler.BukkitRunnable;
 

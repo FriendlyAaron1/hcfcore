@@ -3,7 +3,7 @@ package org.ayple.hcfcore.core.faction;
 import org.ayple.hcfcore.Hcfcore;
 import org.ayple.hcfcore.core.claims.Claim;
 import org.ayple.hcfcore.core.claims.ClaimsManager;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -304,6 +304,9 @@ public class NewFactionManager {
     public static void kickPlayerFromFaction(Faction faction, OfflinePlayer player) {
         UUID target_player_id = player.getUniqueId();
 
+        if (player.isOnline()) {
+            Hcfcore.getInstance().getScoreboardHandler().onPlayerLeftFaction(player.getPlayer(), faction);
+        }
 
         if (faction.removeFactionMember(target_player_id)) {
             Bukkit.getScheduler().runTaskAsynchronously(Hcfcore.getInstance(), () -> {

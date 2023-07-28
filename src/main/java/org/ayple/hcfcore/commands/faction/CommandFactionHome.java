@@ -1,7 +1,7 @@
 package org.ayple.hcfcore.commands.faction;
 
 import org.ayple.hcfcore.commands.SubCommand;
-import org.ayple.hcfcore.core.cooldowns.oldcooldowns.CooldownManager;
+import org.ayple.hcfcore.core.cooldowns.CooldownManager;
 import org.ayple.hcfcore.core.faction.Faction;
 import org.ayple.hcfcore.core.faction.NewFactionManager;
 import org.bukkit.ChatColor;
@@ -38,7 +38,7 @@ public class CommandFactionHome extends SubCommand {
             return;
         }
 
-        if (CooldownManager.playerHasPvpTimer(player)) {
+        if (CooldownManager.playerHasPvpTimer(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "You need to disable your pvp timer. Do /pvpenable");
             return;
         }

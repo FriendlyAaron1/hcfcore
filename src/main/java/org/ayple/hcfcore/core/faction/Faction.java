@@ -6,15 +6,13 @@ import org.ayple.hcfcore.helpers.HcfSqlConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.UUID;
+import java.util.*;
 
 public class Faction {
 
@@ -24,7 +22,9 @@ public class Faction {
     public UUID getFactionID() { return this.factionID; }
 
 
-    public final Team teamInstance;
+//    public final Team team;
+
+
 
     private String factionName;
     public String getFactionName() { return this.factionName; }
@@ -85,6 +85,7 @@ public class Faction {
 
     private final Hashtable<UUID, Integer> factionMembers = new Hashtable<UUID, Integer>();
     public Hashtable<UUID, Integer> getFactionMembers() { return this.factionMembers; }
+
     public boolean removeFactionMember(UUID player_id) {
         if (factionMembers.get(player_id) == 3) {
             System.out.println("Can't kick them, they are the leader!");
@@ -92,16 +93,29 @@ public class Faction {
         }
 
         factionMembers.remove(player_id);
-        teamInstance.removeEntry(Bukkit.getOfflinePlayer(player_id).getName());
+
+        //        this.team.removeEntry(Bukkit.getOfflinePlayer(player_id).getName());
         return true;
     }
+
+    public Collection<Player> getOnlineFactionMembets() {
+        Collection<Player> onlinemembers = new ArrayList<Player>();
+        for (UUID memberID : getFactionMembers().keySet()) {
+            OfflinePlayer member = Bukkit.getOfflinePlayer(memberID);
+            if (member.isOnline())
+                onlinemembers.add(member.getPlayer());
+        }
+
+        return onlinemembers;
+    }
+
     public void addFactionMember(UUID player_id, int rank) {
         if (factionMembers.get(player_id) != null) {
             System.out.println("POSSIBLE ERROR: adding a member to a faction they're already stored in?");
         }
 
         factionMembers.put(player_id, rank);
-        teamInstance.addEntry(Bukkit.getOfflinePlayer(player_id).getName());
+//        this.team.addEntry(Bukkit.getOfflinePlayer(player_id).getName());
     }
 
     public void changeFactionMemberRank(UUID player_id, int rank) {
@@ -160,8 +174,6 @@ public class Faction {
         this.claim = claim;
         this.dtr = dtr;
         this.bal = bal;
-        this.teamInstance = Hcfcore.getScoreManager().getMainScoreboard().registerNewTeam(faction_id.toString());
-
     }
 
     public int getFactionMembersSize() {
